@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "DSI_PPAI/1.0.0": {
+        "runtime": {
+          "DSI_PPAI.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "DSI_PPAI/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
