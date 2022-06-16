@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DSI_PPAI.Entidades
+﻿namespace DSI_PPAI.Entidades
 {
     public class CentroDeInvestigacion
     {
@@ -24,8 +18,30 @@ namespace DSI_PPAI.Entidades
         private int tiempoAntelacionReserva;
         private DateTime fechaBaja;
         private string motivoBaja;
+        private AsignacionCientificoDelCI[] cientificos;
+        private RecursoTecnologico[] recursoTecnologicos;
+        private TipoRecursoTecnologico tipoRecursoTecnologico;
 
-        public CentroDeInvestigacion(string nombre, string sigla, string direccion, string edificio, int piso, string coordenadas, string telefonosContacto, string correoElectronico, int numeroResolucionCreacion, DateTime fechaResolucionCreacion, string reglamento, string caracteristicasGenerales, DateTime fechaAlta, int tiempoAntelacionReserva, DateTime fechaBaja, string motivoBaja)
+        public CentroDeInvestigacion(
+            string nombre,
+            string sigla,
+            string direccion,
+            string edificio,
+            int piso,
+            string coordenadas,
+            string telefonosContacto,
+            string correoElectronico,
+            int numeroResolucionCreacion,
+            DateTime fechaResolucionCreacion,
+            string reglamento,
+            string caracteristicasGenerales,
+            DateTime fechaAlta,
+            int tiempoAntelacionReserva,
+            DateTime fechaBaja,
+            string motivoBaja,
+            RecursoTecnologico[] recursoTecnologicos,
+            TipoRecursoTecnologico tipoRecursoTecnologico,
+            AsignacionCientificoDelCI[] cientificos)
         {
             this.Nombre = nombre;
             this.Sigla = sigla;
@@ -43,7 +59,10 @@ namespace DSI_PPAI.Entidades
             this.TiempoAntelacionReserva = tiempoAntelacionReserva;
             this.FechaBaja = fechaBaja;
             this.MotivoBaja = motivoBaja;
-        }        
+            this.RecursoTecnologicos = recursoTecnologicos;
+            this.TipoRecursoTecnologico = tipoRecursoTecnologico;
+            this.Cientificos = cientificos;
+        }
 
         public string Nombre { get => nombre; set => nombre = value; }
         public string Sigla { get => sigla; set => sigla = value; }
@@ -61,5 +80,8 @@ namespace DSI_PPAI.Entidades
         public int TiempoAntelacionReserva { get => tiempoAntelacionReserva; set => tiempoAntelacionReserva = value; }
         public DateTime FechaBaja { get => fechaBaja; set => fechaBaja = value; }
         public string MotivoBaja { get => motivoBaja; set => motivoBaja = value; }
+        public RecursoTecnologico[] RecursoTecnologicos { get => recursoTecnologicos; set => recursoTecnologicos = value; }
+        public TipoRecursoTecnologico TipoRecursoTecnologico { get => tipoRecursoTecnologico; set => tipoRecursoTecnologico = value; }
+        public AsignacionCientificoDelCI[] Cientificos { get => cientificos; set => cientificos = value; }
     }
 }
