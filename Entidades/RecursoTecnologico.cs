@@ -13,27 +13,22 @@ namespace DSI_PPAI.Entidades {
 	{
 		private int numeroRT;
 		private DateTime fechaAlta;
-		private Image imagen;
+		private var imagen;
 		private int periodicidadMantenimientoPrev;
 		private int duracionMantenimientoPrev;
 		private int fraccionHorarioTurnos;
 
-        public RecursoTecnologico(int numeroRT, DateTime fechaAlta, Image imagen, int periodicidadMantenimientoPrev, int duracionMantenimientoPrev, int fraccionHorarioTurnos)
+		public RecursoTecnologico()
         {
-            this.numeroRT = numeroRT;
-            this.fechaAlta = fechaAlta;
-            this.imagen = imagen;
-            this.periodicidadMantenimientoPrev = periodicidadMantenimientoPrev;
-            this.duracionMantenimientoPrev = duracionMantenimientoPrev;
-            this.fraccionHorarioTurnos = fraccionHorarioTurnos;
+
         }
 
         public int NumeroRT { get => numeroRT; set => numeroRT = value; }
         public DateTime FechaAlta { get => fechaAlta; set => fechaAlta = value; }
-		public Image Imagen { get => imagen; set => imagen = value; }
-		public int PeriodicidadMantenimientoPrev { get => periodicidadMantenimientoPrev; set => periodicidadMantenimientoPrev = value; }
+        public object Imagen { get => imagen; set => imagen = value; }
+        public int PeriodicidadMantenimientoPrev { get => periodicidadMantenimientoPrev; set => periodicidadMantenimientoPrev = value; }
         public int DuracionMantenimientoPrev { get => duracionMantenimientoPrev; set => duracionMantenimientoPrev = value; }
         public int FraccionHorarioTurnos { get => fraccionHorarioTurnos; set => fraccionHorarioTurnos = value; }
-        
+
     }
 }

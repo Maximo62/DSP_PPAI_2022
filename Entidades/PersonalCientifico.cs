@@ -16,16 +16,13 @@ namespace DSI_PPAI.Entidades
 		private string correoElectronicoPersonal;
 		private int telefonoCelular;
 
-        public PersonalCientifico(int legajo, string nombre, string apellido, int numeroDocumento, string correoElectronicoInstitucional, string correoElectronicoPersonal, int telefonoCelular)
-        {
-            this.legajo = legajo;
-            this.nombre = nombre;
-            this.apellido = apellido;
-            this.numeroDocumento = numeroDocumento;
-            this.correoElectronicoInstitucional = correoElectronicoInstitucional;
-            this.correoElectronicoPersonal = correoElectronicoPersonal;
-            this.telefonoCelular = telefonoCelular;
-        }
+        
+
+        public PersonalCientifico()
+		{
+				
+
+		}
 
         public int Legajo { get => legajo; set => legajo = value; }
         public string Nombre { get => nombre; set => nombre = value; }
@@ -34,4 +31,5 @@ namespace DSI_PPAI.Entidades
         public string CorreoElectronicoInstitucional { get => correoElectronicoInstitucional; set => correoElectronicoInstitucional = value; }
         public string CorreoElectronicoPersonal { get => correoElectronicoPersonal; set => correoElectronicoPersonal = value; }
         public int TelefonoCelular { get => telefonoCelular; set => telefonoCelular = value; }
+
     }
