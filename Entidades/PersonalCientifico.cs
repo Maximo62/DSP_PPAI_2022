@@ -15,6 +15,7 @@ namespace DSI_PPAI.Entidades
 		private string correoElectronicoInstitucional;
 		private string correoElectronicoPersonal;
 		private int telefonoCelular;
+		private Usuario usuario;
 
         
 
@@ -31,5 +32,5 @@ namespace DSI_PPAI.Entidades
         public string CorreoElectronicoInstitucional { get => correoElectronicoInstitucional; set => correoElectronicoInstitucional = value; }
         public string CorreoElectronicoPersonal { get => correoElectronicoPersonal; set => correoElectronicoPersonal = value; }
         public int TelefonoCelular { get => telefonoCelular; set => telefonoCelular = value; }
-
+        public Usuario Usuario { get => usuario; set => usuario = value; }
     }
