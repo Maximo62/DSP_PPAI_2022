@@ -27,7 +27,7 @@ namespace DSI_PPAI.Entidades
 
         public CentroDeInvestigacion(string nombre, string sigla, string direccion, string edificio, int piso, string coordenadas, string telefonosContacto, string correoElectronico, int numeroResolucionCreacion, DateTime fechaResolucionCreacion, string reglamento, string caracteristicasGenerales, DateTime fechaAlta, int tiempoAntelacionReserva, DateTime fechaBaja, string motivoBaja)
         {
-            this.Nombre = nombre;
+            this.nombre = nombre;
             this.Sigla = sigla;
             this.Direccion = direccion;
             this.Edificio = edificio;
