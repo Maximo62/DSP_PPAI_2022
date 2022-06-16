@@ -1,33 +1,34 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-/// <summary>
-/// Summary description for Class1
-/// </summary>
-public class Class1
-{
-	private int numeroRT;
-	private DateTime fechaAlta;
-	private var imagen;
-	private int periodicidadMantenimientoPrev;
-	private int duracionMantenimientoPrev;
-	private int fraccionHorarioTurnos;
+namespace DSI_PPAI.Entidades { 
 
+	/// <summary>
+	/// Summary description for Class1
+	/// </summary>
+	public class RecursoTecnologico
+	{
+		private int numeroRT;
+		private DateTime fechaAlta;
+		private var imagen;
+		private int periodicidadMantenimientoPrev;
+		private int duracionMantenimientoPrev;
+		private int fraccionHorarioTurnos;
 
-	public int getNumeroRT() { return this.numeroRT;}
-	public int setNumeroRT(var) { this.numeroRT = var; }
+		public RecursoTecnologico()
+        {
 
-	public int getFechaAlta() { return this.fechaAlta; }
-	public int setFechaAlta(var){ this.fechaAlta = var; }
+        }
 
+        public int NumeroRT { get => numeroRT; set => numeroRT = value; }
+        public DateTime FechaAlta { get => fechaAlta; set => fechaAlta = value; }
+        public object Imagen { get => imagen; set => imagen = value; }
+        public int PeriodicidadMantenimientoPrev { get => periodicidadMantenimientoPrev; set => periodicidadMantenimientoPrev = value; }
+        public int DuracionMantenimientoPrev { get => duracionMantenimientoPrev; set => duracionMantenimientoPrev = value; }
+        public int FraccionHorarioTurnos { get => fraccionHorarioTurnos; set => fraccionHorarioTurnos = value; }
 
-
-	public int getPeriodicidadMantenimientoPrev(){ return this.PeriodicidadMantenimientoPrev; }
-	public int setPeriodicidadMantenimientoPrev(var) { this.PeriodicidadMantenimientoPrev = var; }
-
-	public int getDuracionMantenimientoPrev() { return this.duracionMantenimientoPrev; }
-	public int setDuracionMantenimientoPrev(var) { this.duracionMantenimientoPrev = var; }
-
-	public int getFraccionHorarioTurnos() { return this.duracionMantenimientoPrev; }
-	public int setFraccionHorarioTurnos(var) { this.duracionMantenimientoPrev = var; }
-
+    }
 }

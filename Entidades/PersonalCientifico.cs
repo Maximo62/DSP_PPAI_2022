@@ -1,14 +1,35 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-/// <summary>
-/// Summary description for Class1
-/// </summary>
-public class Class1
+namespace DSI_PPAI.Entidades
 {
-	public Class1()
+	public class PersonalCientifico
 	{
-		//
-		// TODO: Add constructor logic here
-		//
-	}
-}
+		private int legajo;
+		private string nombre;
+		private string apellido;
+		private int numeroDocumento;
+		private string correoElectronicoInstitucional;
+		private string correoElectronicoPersonal;
+		private int telefonoCelular;
+
+        
+
+        public PersonalCientifico()
+		{
+				
+
+		}
+
+        public int Legajo { get => legajo; set => legajo = value; }
+        public string Nombre { get => nombre; set => nombre = value; }
+        public string Apellido { get => apellido; set => apellido = value; }
+        public int NumeroDocumento { get => numeroDocumento; set => numeroDocumento = value; }
+        public string CorreoElectronicoInstitucional { get => correoElectronicoInstitucional; set => correoElectronicoInstitucional = value; }
+        public string CorreoElectronicoPersonal { get => correoElectronicoPersonal; set => correoElectronicoPersonal = value; }
+        public int TelefonoCelular { get => telefonoCelular; set => telefonoCelular = value; }
+
+    }
