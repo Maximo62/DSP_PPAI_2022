@@ -4,8 +4,5 @@
     <Compile Update="Boundary\Inicio\Inicio.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Boundary\RegistrarTurno\RegistrarTurno.cs">
-      <SubType>Form</SubType>
-    </Compile>
   </ItemGroup>
 </Project>

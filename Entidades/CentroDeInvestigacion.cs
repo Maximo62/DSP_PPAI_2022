@@ -18,10 +18,73 @@
         private int tiempoAntelacionReserva;
         private DateTime fechaBaja;
         private string motivoBaja;
-        private AsignacionCientificoDelCI[] cientificos;
         private RecursoTecnologico[] recursoTecnologicos;
-        private TipoRecursoTecnologico tipoRecursoTecnologico;
+        private AsignacionCientificoDelCI[] cientificos;
 
+        // Constructor sin RT ni Asignacion
+        public CentroDeInvestigacion(string nombre, string sigla, string direccion, string edificio, int piso, string coordenadas, string telefonosContacto, string correoElectronico, int numeroResolucionCreacion, DateTime fechaResolucionCreacion, string reglamento, string caracteristicasGenerales, DateTime fechaAlta, int tiempoAntelacionReserva, DateTime fechaBaja, string motivoBaja)
+        {
+            this.nombre = nombre;
+            this.sigla = sigla;
+            this.direccion = direccion;
+            this.edificio = edificio;
+            this.piso = piso;
+            this.coordenadas = coordenadas;
+            this.telefonosContacto = telefonosContacto;
+            this.correoElectronico = correoElectronico;
+            this.numeroResolucionCreacion = numeroResolucionCreacion;
+            this.fechaResolucionCreacion = fechaResolucionCreacion;
+            this.reglamento = reglamento;
+            this.caracteristicasGenerales = caracteristicasGenerales;
+            this.fechaAlta = fechaAlta;
+            this.tiempoAntelacionReserva = tiempoAntelacionReserva;
+            this.fechaBaja = fechaBaja;
+            this.motivoBaja = motivoBaja;
+        }
+
+        // Constructor sin RT
+        public CentroDeInvestigacion(string nombre, string sigla, string direccion, string edificio, int piso, string coordenadas, string telefonosContacto, string correoElectronico, int numeroResolucionCreacion, DateTime fechaResolucionCreacion, string reglamento, string caracteristicasGenerales, DateTime fechaAlta, int tiempoAntelacionReserva, DateTime fechaBaja, string motivoBaja, AsignacionCientificoDelCI[] cientificos)
+        {
+            this.nombre = nombre;
+            this.sigla = sigla;
+            this.direccion = direccion;
+            this.edificio = edificio;
+            this.piso = piso;
+            this.coordenadas = coordenadas;
+            this.telefonosContacto = telefonosContacto;
+            this.correoElectronico = correoElectronico;
+            this.numeroResolucionCreacion = numeroResolucionCreacion;
+            this.fechaResolucionCreacion = fechaResolucionCreacion;
+            this.reglamento = reglamento;
+            this.caracteristicasGenerales = caracteristicasGenerales;
+            this.fechaAlta = fechaAlta;
+            this.tiempoAntelacionReserva = tiempoAntelacionReserva;
+            this.fechaBaja = fechaBaja;
+            this.motivoBaja = motivoBaja;
+            this.cientificos = cientificos;
+        }
+        // Constructor sin AsignacionCientificoDelCI
+        public CentroDeInvestigacion(string nombre, string sigla, string direccion, string edificio, int piso, string coordenadas, string telefonosContacto, string correoElectronico, int numeroResolucionCreacion, DateTime fechaResolucionCreacion, string reglamento, string caracteristicasGenerales, DateTime fechaAlta, int tiempoAntelacionReserva, DateTime fechaBaja, string motivoBaja, RecursoTecnologico[] recursoTecnologicos)
+        {
+            this.nombre = nombre;
+            this.sigla = sigla;
+            this.direccion = direccion;
+            this.edificio = edificio;
+            this.piso = piso;
+            this.coordenadas = coordenadas;
+            this.telefonosContacto = telefonosContacto;
+            this.correoElectronico = correoElectronico;
+            this.numeroResolucionCreacion = numeroResolucionCreacion;
+            this.fechaResolucionCreacion = fechaResolucionCreacion;
+            this.reglamento = reglamento;
+            this.caracteristicasGenerales = caracteristicasGenerales;
+            this.fechaAlta = fechaAlta;
+            this.tiempoAntelacionReserva = tiempoAntelacionReserva;
+            this.fechaBaja = fechaBaja;
+            this.motivoBaja = motivoBaja;
+            this.recursoTecnologicos = recursoTecnologicos;
+        }
+        // Constructor completo
         public CentroDeInvestigacion(
             string nombre,
             string sigla,
@@ -40,7 +103,6 @@
             DateTime fechaBaja,
             string motivoBaja,
             RecursoTecnologico[] recursoTecnologicos,
-            TipoRecursoTecnologico tipoRecursoTecnologico,
             AsignacionCientificoDelCI[] cientificos)
         {
             this.Nombre = nombre;
@@ -60,7 +122,6 @@
             this.FechaBaja = fechaBaja;
             this.MotivoBaja = motivoBaja;
             this.RecursoTecnologicos = recursoTecnologicos;
-            this.TipoRecursoTecnologico = tipoRecursoTecnologico;
             this.Cientificos = cientificos;
         }
 
@@ -81,7 +142,6 @@
         public DateTime FechaBaja { get => fechaBaja; set => fechaBaja = value; }
         public string MotivoBaja { get => motivoBaja; set => motivoBaja = value; }
         public RecursoTecnologico[] RecursoTecnologicos { get => recursoTecnologicos; set => recursoTecnologicos = value; }
-        public TipoRecursoTecnologico TipoRecursoTecnologico { get => tipoRecursoTecnologico; set => tipoRecursoTecnologico = value; }
         public AsignacionCientificoDelCI[] Cientificos { get => cientificos; set => cientificos = value; }
     }
 }

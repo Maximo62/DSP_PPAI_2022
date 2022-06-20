@@ -10,6 +10,11 @@ namespace DSI_PPAI.Entidades
     {
         private string nombre;
 
+        public Modelo(string nombre)
+        {
+            this.nombre = nombre;
+        }
+
         public string Nombre { get => nombre; set => nombre = value; }
     }
 }

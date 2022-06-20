@@ -1,8 +1,11 @@
 {
   "ExpandedNodes": [
     "",
+    "\\Boundary",
+    "\\Boundary\\Inicio",
+    "\\Boundary\\RegistrarTurno",
     "\\Entidades"
   ],
-  "SelectedNode": "\\.gitignore",
+  "SelectedNode": "\\Boundary",
   "PreviewInSolutionExplorer": false
 }

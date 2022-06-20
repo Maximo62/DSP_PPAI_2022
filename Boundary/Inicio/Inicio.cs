@@ -1,3 +1,5 @@
+using DSI_PPAI.Boundary;
+
 namespace DSI_PPAI
 {
     public partial class Inicio : Form
@@ -14,7 +16,7 @@ namespace DSI_PPAI
 
         private void registrarTurnoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            RegistrarTurno RegistrarTurno = new registrarTurno();
+            PantallaRegistrarTurnoRT RegistrarTurno = new PantallaRegistrarTurnoRT();
             RegistrarTurno.ShowDialog();
         }
     }
