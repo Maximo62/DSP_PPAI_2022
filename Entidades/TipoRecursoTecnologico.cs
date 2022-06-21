@@ -19,6 +19,9 @@ namespace DSI_PPAI.Entidades
 
         public string Nombre { get => nombre; set => nombre = value; }
         public string Descripcion { get => descripcion; set => descripcion = value; }
+
+
+        
     }
 
 }

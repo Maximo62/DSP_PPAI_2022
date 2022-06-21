@@ -29,6 +29,11 @@ namespace DSI_PPAI.Entidades
         public string Ambito { get => ambito; set => ambito = value; }
         public bool EsReservable { get => esReservable; set => esReservable = value; }
         public bool EsCancelable { get => esCancelable; set => esCancelable = value; }
+
+        public bool sosReservable()
+        {
+            return this.esReservable ? true : false;
+        }
         
     }
 }

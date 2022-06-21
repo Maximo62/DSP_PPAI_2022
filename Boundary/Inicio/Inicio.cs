@@ -1,4 +1,5 @@
 using DSI_PPAI.Boundary;
+using DSI_PPAI.Control;
 
 namespace DSI_PPAI
 {
@@ -16,8 +17,10 @@ namespace DSI_PPAI
 
         private void registrarTurnoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PantallaRegistrarTurnoRT RegistrarTurno = new PantallaRegistrarTurnoRT();
-            RegistrarTurno.ShowDialog();
+            PantallaRegistrarTurnoRT pantalla = new PantallaRegistrarTurnoRT();
+            GestorReservaTurnoRT gestorReservaTurnoRT = new GestorReservaTurnoRT();
+
+            pantalla.tomarOpNuevoTurnoRT(gestorReservaTurnoRT);
         }
     }
 }
