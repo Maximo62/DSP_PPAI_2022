@@ -63,6 +63,26 @@ namespace DSI_PPAI.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap flecha_der {
+            get {
+                object obj = ResourceManager.GetObject("flecha_der", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap flecha_izq {
+            get {
+                object obj = ResourceManager.GetObject("flecha_izq", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Universidad_Nacional_de_Córdoba {
             get {
                 object obj = ResourceManager.GetObject("Universidad_Nacional_de_Córdoba", resourceCulture);

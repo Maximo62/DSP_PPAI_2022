@@ -1,3 +1,5 @@
+using DSI_PPAI.Entidades;
+
 namespace DSI_PPAI
 {
     internal static class Program
@@ -10,6 +12,7 @@ namespace DSI_PPAI
         {
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
+            
             ApplicationConfiguration.Initialize();
             Application.Run(new Inicio());
         }
