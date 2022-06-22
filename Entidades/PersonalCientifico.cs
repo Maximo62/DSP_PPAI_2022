@@ -15,8 +15,8 @@ namespace DSI_PPAI.Entidades
 		private string correoElectronicoInstitucional;
 		private string correoElectronicoPersonal;
 		private int telefonoCelular;
-		private Usuario usuario;
-        public PersonalCientifico(int legajo, string nombre, string apellido, int numeroDocumento, string correoElectronicoInstitucional, string correoElectronicoPersonal, int telefonoCelular, Usuario usuario)
+		private Usuario? usuario;
+        public PersonalCientifico(int legajo, string nombre, string apellido, int numeroDocumento, string correoElectronicoInstitucional, string correoElectronicoPersonal, int telefonoCelular, Usuario usuario = null)
         {
             this.legajo = legajo;
             this.nombre = nombre;

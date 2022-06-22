@@ -16,13 +16,13 @@
         private string caracteristicasGenerales;
         private DateTime fechaAlta;
         private int tiempoAntelacionReserva;
-        private DateTime fechaBaja;
+        private DateTime? fechaBaja = null;
         private string motivoBaja;
         private RecursoTecnologico[] recursoTecnologicos;
-        private AsignacionCientificoDelCI[] cientificos;
+        private List<AsignacionCientificoDelCI> cientificos;
 
         // Constructor sin RT ni Asignacion
-        public CentroDeInvestigacion(string nombre, string sigla, string direccion, string edificio, int piso, string coordenadas, string telefonosContacto, string correoElectronico, int numeroResolucionCreacion, DateTime fechaResolucionCreacion, string reglamento, string caracteristicasGenerales, DateTime fechaAlta, int tiempoAntelacionReserva, DateTime fechaBaja, string motivoBaja)
+        public CentroDeInvestigacion(string nombre, string sigla, string direccion, string edificio, int piso, string coordenadas, string telefonosContacto, string correoElectronico, int numeroResolucionCreacion, DateTime fechaResolucionCreacion, string reglamento, string caracteristicasGenerales, DateTime fechaAlta, int tiempoAntelacionReserva, string motivoBaja)
         {
             this.nombre = nombre;
             this.sigla = sigla;
@@ -38,12 +38,11 @@
             this.caracteristicasGenerales = caracteristicasGenerales;
             this.fechaAlta = fechaAlta;
             this.tiempoAntelacionReserva = tiempoAntelacionReserva;
-            this.fechaBaja = fechaBaja;
             this.motivoBaja = motivoBaja;
         }
 
         // Constructor sin RT
-        public CentroDeInvestigacion(string nombre, string sigla, string direccion, string edificio, int piso, string coordenadas, string telefonosContacto, string correoElectronico, int numeroResolucionCreacion, DateTime fechaResolucionCreacion, string reglamento, string caracteristicasGenerales, DateTime fechaAlta, int tiempoAntelacionReserva, DateTime fechaBaja, string motivoBaja, AsignacionCientificoDelCI[] cientificos)
+        public CentroDeInvestigacion(string nombre, string sigla, string direccion, string edificio, int piso, string coordenadas, string telefonosContacto, string correoElectronico, int numeroResolucionCreacion, DateTime fechaResolucionCreacion, string reglamento, string caracteristicasGenerales, DateTime fechaAlta, int tiempoAntelacionReserva, string motivoBaja, List<AsignacionCientificoDelCI> cientificos)
         {
             this.nombre = nombre;
             this.sigla = sigla;
@@ -59,12 +58,11 @@
             this.caracteristicasGenerales = caracteristicasGenerales;
             this.fechaAlta = fechaAlta;
             this.tiempoAntelacionReserva = tiempoAntelacionReserva;
-            this.fechaBaja = fechaBaja;
             this.motivoBaja = motivoBaja;
             this.cientificos = cientificos;
         }
         // Constructor sin AsignacionCientificoDelCI
-        public CentroDeInvestigacion(string nombre, string sigla, string direccion, string edificio, int piso, string coordenadas, string telefonosContacto, string correoElectronico, int numeroResolucionCreacion, DateTime fechaResolucionCreacion, string reglamento, string caracteristicasGenerales, DateTime fechaAlta, int tiempoAntelacionReserva, DateTime fechaBaja, string motivoBaja, RecursoTecnologico[] recursoTecnologicos)
+        public CentroDeInvestigacion(string nombre, string sigla, string direccion, string edificio, int piso, string coordenadas, string telefonosContacto, string correoElectronico, int numeroResolucionCreacion, DateTime fechaResolucionCreacion, string reglamento, string caracteristicasGenerales, DateTime fechaAlta, int tiempoAntelacionReserva, string motivoBaja, RecursoTecnologico[] recursoTecnologicos)
         {
             this.nombre = nombre;
             this.sigla = sigla;
@@ -80,7 +78,6 @@
             this.caracteristicasGenerales = caracteristicasGenerales;
             this.fechaAlta = fechaAlta;
             this.tiempoAntelacionReserva = tiempoAntelacionReserva;
-            this.fechaBaja = fechaBaja;
             this.motivoBaja = motivoBaja;
             this.recursoTecnologicos = recursoTecnologicos;
         }
@@ -103,7 +100,7 @@
             DateTime fechaBaja,
             string motivoBaja,
             RecursoTecnologico[] recursoTecnologicos,
-            AsignacionCientificoDelCI[] cientificos)
+            List<AsignacionCientificoDelCI> cientificos)
         {
             this.Nombre = nombre;
             this.Sigla = sigla;
@@ -139,9 +136,18 @@
         public string CaracteristicasGenerales { get => caracteristicasGenerales; set => caracteristicasGenerales = value; }
         public DateTime FechaAlta { get => fechaAlta; set => fechaAlta = value; }
         public int TiempoAntelacionReserva { get => tiempoAntelacionReserva; set => tiempoAntelacionReserva = value; }
-        public DateTime FechaBaja { get => fechaBaja; set => fechaBaja = value; }
+        public DateTime FechaBaja { get => (DateTime)fechaBaja; set => fechaBaja = value; }
         public string MotivoBaja { get => motivoBaja; set => motivoBaja = value; }
         public RecursoTecnologico[] RecursoTecnologicos { get => recursoTecnologicos; set => recursoTecnologicos = value; }
-        public AsignacionCientificoDelCI[] Cientificos { get => cientificos; set => cientificos = value; }
+        public List<AsignacionCientificoDelCI> Cientificos { get => cientificos; set => cientificos = value; }
+
+        public bool esCientificoDeCI(PersonalCientifico cientificoLogueado)
+        {
+            foreach (AsignacionCientificoDelCI cientifico in this.cientificos)
+            {
+                return cientifico.esTuCientifico(cientificoLogueado);
+            }
+            return false;
+        }
     }
 }

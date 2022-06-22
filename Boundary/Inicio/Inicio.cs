@@ -1,5 +1,6 @@
 using DSI_PPAI.Boundary;
 using DSI_PPAI.Control;
+using DSI_PPAI.Entidades;
 
 namespace DSI_PPAI
 {
@@ -8,11 +9,6 @@ namespace DSI_PPAI
         public Inicio()
         {
             InitializeComponent();
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void registrarTurnoToolStripMenuItem_Click(object sender, EventArgs e)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DSI_PPAI.DTO;
 
 namespace DSI_PPAI.Entidades { 
 
@@ -20,11 +21,11 @@ namespace DSI_PPAI.Entidades {
 		private CambioEstadoRT[] cambiosEstadoRT;
 		private TipoRecursoTecnologico tipoRecursoTecnologico;
 		private Modelo modelo;
-		private Turno[] turnos;
+		private List<Turno> turnos;
         private CentroDeInvestigacion centroDeInvestigacion;
 
         //Constructur sin turnos
-        public RecursoTecnologico(int numeroRT, DateTime fechaAlta, object imagen, int periodicidadMantenimientoPrev, int duracionMantenimientoPrev, int fraccionHorarioTurnos, CambioEstadoRT[] cambiosEstadoRT, TipoRecursoTecnologico tipoRecursoTecnologico, Modelo modelo, CentroDeInvestigacion centroDeInvestigacion)
+        public RecursoTecnologico(int numeroRT, DateTime fechaAlta, object imagen, int periodicidadMantenimientoPrev, int duracionMantenimientoPrev, int fraccionHorarioTurnos, CambioEstadoRT[] cambiosEstadoRT, TipoRecursoTecnologico tipoRecursoTecnologico, Modelo modelo)
         {
             this.numeroRT = numeroRT;
             this.fechaAlta = fechaAlta;
@@ -35,10 +36,9 @@ namespace DSI_PPAI.Entidades {
             this.cambiosEstadoRT = cambiosEstadoRT;
             this.tipoRecursoTecnologico = tipoRecursoTecnologico;
             this.modelo = modelo;
-            this.CentroDeInvestigacion = centroDeInvestigacion;
         }
         //Constructor completo
-        public RecursoTecnologico(int numeroRT, DateTime fechaAlta, object imagen, int periodicidadMantenimientoPrev, int duracionMantenimientoPrev, int fraccionHorarioTurnos, Turno[] turnos, CambioEstadoRT[] cambiosEstadoRT, TipoRecursoTecnologico tipoRecursoTecnologico, Modelo modelo)
+        public RecursoTecnologico(int numeroRT, DateTime fechaAlta, object imagen, int periodicidadMantenimientoPrev, int duracionMantenimientoPrev, int fraccionHorarioTurnos, List<Turno> turnos, CambioEstadoRT[] cambiosEstadoRT, TipoRecursoTecnologico tipoRecursoTecnologico, Modelo modelo)
         {
             this.numeroRT = numeroRT;
             this.fechaAlta = fechaAlta;
@@ -58,7 +58,7 @@ namespace DSI_PPAI.Entidades {
         public int PeriodicidadMantenimientoPrev { get => periodicidadMantenimientoPrev; set => periodicidadMantenimientoPrev = value; }
         public int DuracionMantenimientoPrev { get => duracionMantenimientoPrev; set => duracionMantenimientoPrev = value; }
         public int FraccionHorarioTurnos { get => fraccionHorarioTurnos; set => fraccionHorarioTurnos = value; }
-        public Turno[] Turnos { get => turnos; set => turnos = value; }
+        public List<Turno> Turnos { get => turnos; set => turnos = value; }
         public CambioEstadoRT[] CambiosEstadoRT { get => cambiosEstadoRT; set => cambiosEstadoRT = value; }
         public TipoRecursoTecnologico TipoRecursoTecnologico { get => tipoRecursoTecnologico; set => tipoRecursoTecnologico = value; }
         public Modelo Modelo { get => modelo; set => modelo = value; }
@@ -110,6 +110,24 @@ namespace DSI_PPAI.Entidades {
         public string getModeloYMarca()
         {
             return this.modelo.getModeloYMarca();
+        }
+
+        public bool esCientificoDeCI(PersonalCientifico cientificoLogueado)
+        {
+            return this.centroDeInvestigacion.esCientificoDeCI(cientificoLogueado);
+        }
+
+        public List<DTOTurno> getTurnosRT(DateTime fechaActual)
+        {
+            List<DTOTurno> turnos = new List<DTOTurno>();
+            foreach (Turno turno in this.turnos)
+            {
+                if (turno.esPosteriorFechaActual(fechaActual))
+                {
+                    turnos.Add(turno.getDatos());
+                }
+            }
+            return turnos;
         }
     }
 

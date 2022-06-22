@@ -43,8 +43,7 @@
             this.reservasToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(7, 3, 0, 3);
-            this.menuStrip1.Size = new System.Drawing.Size(914, 30);
+            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -53,13 +52,13 @@
             this.reservasToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.registrarTurnoToolStripMenuItem});
             this.reservasToolStripMenuItem.Name = "reservasToolStripMenuItem";
-            this.reservasToolStripMenuItem.Size = new System.Drawing.Size(80, 24);
+            this.reservasToolStripMenuItem.Size = new System.Drawing.Size(64, 20);
             this.reservasToolStripMenuItem.Text = "Reservas";
             // 
             // registrarTurnoToolStripMenuItem
             // 
             this.registrarTurnoToolStripMenuItem.Name = "registrarTurnoToolStripMenuItem";
-            this.registrarTurnoToolStripMenuItem.Size = new System.Drawing.Size(343, 26);
+            this.registrarTurnoToolStripMenuItem.Size = new System.Drawing.Size(274, 22);
             this.registrarTurnoToolStripMenuItem.Text = "Reservar turno de recurso tecnológico";
             this.registrarTurnoToolStripMenuItem.Click += new System.EventHandler(this.registrarTurnoToolStripMenuItem_Click);
             // 
@@ -71,21 +70,19 @@
             // 
             // Inicio
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.RosyBrown;
             this.BackgroundImage = global::DSI_PPAI.Properties.Resources.Universidad_Nacional_de_Córdoba;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.ClientSize = new System.Drawing.Size(914, 600);
+            this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.menuStrip1);
             this.DoubleBuffered = true;
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Inicio";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Sistema de Gestion de Recursos Técnologicos";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);

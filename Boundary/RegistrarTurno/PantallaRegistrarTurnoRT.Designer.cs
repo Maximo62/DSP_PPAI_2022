@@ -30,23 +30,23 @@
         {
             this.cmb_tipoRecurso = new System.Windows.Forms.ComboBox();
             this.lbl_tipoRecurso = new System.Windows.Forms.Label();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dgvRecursos = new System.Windows.Forms.DataGridView();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.button3 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnSelRecurso = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.button2 = new System.Windows.Forms.Button();
-            this.dataGridView3 = new System.Windows.Forms.DataGridView();
+            this.dgvTurnos = new System.Windows.Forms.DataGridView();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.button5 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.dataGridView4 = new System.Windows.Forms.DataGridView();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvRecursos)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTurnos)).BeginInit();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView4)).BeginInit();
             this.SuspendLayout();
@@ -69,16 +69,19 @@
             this.lbl_tipoRecurso.TabIndex = 1;
             this.lbl_tipoRecurso.Text = "Tipo de recurso tecnologico";
             // 
-            // dataGridView1
+            // dgvRecursos
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(14, 20);
-            this.dataGridView1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowHeadersWidth = 51;
-            this.dataGridView1.RowTemplate.Height = 29;
-            this.dataGridView1.Size = new System.Drawing.Size(667, 141);
-            this.dataGridView1.TabIndex = 2;
+            this.dgvRecursos.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvRecursos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvRecursos.Location = new System.Drawing.Point(14, 20);
+            this.dgvRecursos.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dgvRecursos.Name = "dgvRecursos";
+            this.dgvRecursos.RowHeadersWidth = 51;
+            this.dgvRecursos.RowTemplate.Height = 29;
+            this.dgvRecursos.Size = new System.Drawing.Size(667, 141);
+            this.dgvRecursos.TabIndex = 2;
+            this.dgvRecursos.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvRecursos_CellFormatting);
+            this.dgvRecursos.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvRecursos_CellPainting);
             // 
             // dataGridView2
             // 
@@ -104,8 +107,8 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.button1);
-            this.groupBox1.Controls.Add(this.dataGridView1);
+            this.groupBox1.Controls.Add(this.btnSelRecurso);
+            this.groupBox1.Controls.Add(this.dgvRecursos);
             this.groupBox1.Location = new System.Drawing.Point(25, 69);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox1.Name = "groupBox1";
@@ -115,20 +118,21 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Recursos Tecnologicos";
             // 
-            // button1
+            // btnSelRecurso
             // 
-            this.button1.Location = new System.Drawing.Point(598, 165);
-            this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(82, 22);
-            this.button1.TabIndex = 7;
-            this.button1.Text = "Seleccionar";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnSelRecurso.Location = new System.Drawing.Point(598, 165);
+            this.btnSelRecurso.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnSelRecurso.Name = "btnSelRecurso";
+            this.btnSelRecurso.Size = new System.Drawing.Size(82, 22);
+            this.btnSelRecurso.TabIndex = 7;
+            this.btnSelRecurso.Text = "Seleccionar";
+            this.btnSelRecurso.UseVisualStyleBackColor = true;
+            this.btnSelRecurso.Click += new System.EventHandler(this.tomarSeleccionRT);
             // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.button2);
-            this.groupBox2.Controls.Add(this.dataGridView3);
+            this.groupBox2.Controls.Add(this.dgvTurnos);
             this.groupBox2.Location = new System.Drawing.Point(25, 278);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox2.Name = "groupBox2";
@@ -137,7 +141,6 @@
             this.groupBox2.TabIndex = 9;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Turnos Disponibles";
-            this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
             // button2
             // 
@@ -149,16 +152,16 @@
             this.button2.Text = "Seleccionar";
             this.button2.UseVisualStyleBackColor = true;
             // 
-            // dataGridView3
+            // dgvTurnos
             // 
-            this.dataGridView3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView3.Location = new System.Drawing.Point(14, 20);
-            this.dataGridView3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.dataGridView3.Name = "dataGridView3";
-            this.dataGridView3.RowHeadersWidth = 51;
-            this.dataGridView3.RowTemplate.Height = 29;
-            this.dataGridView3.Size = new System.Drawing.Size(667, 196);
-            this.dataGridView3.TabIndex = 3;
+            this.dgvTurnos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvTurnos.Location = new System.Drawing.Point(14, 20);
+            this.dgvTurnos.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dgvTurnos.Name = "dgvTurnos";
+            this.dgvTurnos.RowHeadersWidth = 51;
+            this.dgvTurnos.RowTemplate.Height = 29;
+            this.dgvTurnos.Size = new System.Drawing.Size(667, 196);
+            this.dgvTurnos.TabIndex = 3;
             // 
             // groupBox3
             // 
@@ -221,12 +224,11 @@
             this.Controls.Add(this.cmb_tipoRecurso);
             this.Name = "PantallaRegistrarTurnoRT";
             this.Text = "Registrar Turno Reserva";
-            this.Load += new System.EventHandler(this.RegistrarTurno_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvRecursos)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTurnos)).EndInit();
             this.groupBox3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView4)).EndInit();
             this.ResumeLayout(false);
@@ -238,14 +240,14 @@
 
         private ComboBox cmb_tipoRecurso;
         private Label lbl_tipoRecurso;
-        private DataGridView dataGridView1;
+        private DataGridView dgvRecursos;
         private DataGridView dataGridView2;
         private Button button3;
         private GroupBox groupBox1;
         private GroupBox groupBox2;
-        private Button button1;
+        private Button btnSelRecurso;
         private Button button2;
-        private DataGridView dataGridView3;
+        private DataGridView dgvTurnos;
         private GroupBox groupBox3;
         private Button button5;
         private Button button4;
