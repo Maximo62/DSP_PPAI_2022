@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DSI_PPAI.Control;
 using DSI_PPAI.DTO;
+using DSI_PPAI.Entidades;
+using DSI_PPAI.Boundary.RegistrarTurno;
 
 
 namespace DSI_PPAI.Boundary
@@ -62,6 +64,7 @@ namespace DSI_PPAI.Boundary
             dgvRecursos.Columns["modeloYMarca"].HeaderText = "Modelo y Marca";
             dgvRecursos.Columns["nombreEstadoActual"].DisplayIndex = 3;
             dgvRecursos.Columns["nombreEstadoActual"].HeaderText = "Estado Actual";
+            dgvRecursos.Columns["nombreTipoRT"].Visible = false;
 
             if (dgvRecursos.Rows.Count.Equals(0))
             {
@@ -88,11 +91,33 @@ namespace DSI_PPAI.Boundary
             dgvTurnos.Columns["fechaHoraFin"].HeaderText = "Fecha y Hora Fin";
             dgvTurnos.Columns["nombreEstadoActual"].DisplayIndex = 2;
             dgvTurnos.Columns["nombreEstadoActual"].HeaderText = "Estado Actual";
+            dgvTurnos.Columns["diaSemana"].Visible = false;
 
             if (dgvTurnos.Rows.Count.Equals(0))
             {
                 MessageBox.Show("No se encontraron turnos para el recurso seleccionado.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+
+        private void tomarSeleccionTurno(object sender, EventArgs e)
+        {
+            DTOTurno turnoSeleccionado = new DTOTurno();
+            if (dgvTurnos.CurrentRow != null)
+            {
+                turnoSeleccionado = (DTOTurno)dgvTurnos.CurrentRow.DataBoundItem;
+                gestorReservaTurnoRT.tomarSeleccionTurno(turnoSeleccionado);
+            }
+        }
+
+        public void solicitarConfirmacionReserva(DTOConfirmacionReserva datosConfirmacionReserva, List<string> tiposNotificacion)
+        {
+            ModalConfirmacion modalConfirmacion = new ModalConfirmacion();
+            modalConfirmacion.habilitarVentana(datosConfirmacionReserva, tiposNotificacion, this);
+        }
+
+        public void tomarConfirmacionreserva(DTOConfirmacionReserva datosConfirmacion, int indiceTipoNotificacion)
+        {
+            gestorReservaTurnoRT.tomarConfirmacionReserva(datosConfirmacion, indiceTipoNotificacion);
         }
 
         public void mostrarErrorCientifico()
@@ -161,19 +186,29 @@ namespace DSI_PPAI.Boundary
             }
         }
 
-        private void btnSelRecurso_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void habilitarSeleccionRecurso(object sender, DataGridViewCellEventArgs e)
         {
             btnSelRecurso.Enabled = true;
         }
 
-        private void monthCalendar1_DateChanged(object sender, DateRangeEventArgs e)
+        private void habilitarSeleccionTurno(object sender, DataGridViewCellEventArgs e)
         {
+            btnSelTurno.Enabled = true;
+        }
 
+        public void mostrarMensaje(string mensaje)
+        {
+            MessageBox.Show(mensaje, "Informacion", MessageBoxButtons.OK, MessageBoxIcon.Information); 
+        }
+
+        public void ocultarPantalla()
+        {
+            this.Dispose();
+        }
+
+        private void cancelarReserva(object sender, EventArgs e)
+        {
+            this.Dispose();
         }
     }
 }

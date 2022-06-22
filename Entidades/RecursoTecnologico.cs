@@ -129,6 +129,11 @@ namespace DSI_PPAI.Entidades {
             }
             return turnos;
         }
+
+        public string getNombreTipoRT()
+        {
+            return this.tipoRecursoTecnologico.Nombre;
+        }
     }
 
     

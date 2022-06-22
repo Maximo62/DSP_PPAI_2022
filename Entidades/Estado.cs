@@ -34,6 +34,11 @@ namespace DSI_PPAI.Entidades
         {
             return this.esReservable ? true : false;
         }
+
+        public bool esAmbitoTurno()
+        {
+            return this.ambito == "Turno";
+        }
         
     }
 }

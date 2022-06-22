@@ -9,6 +9,7 @@ namespace DSI_PPAI.Entidades
 {
     public class Turno
     {
+        private int nroTurno;
         private DateTime fechaGeneracion;
         private string diaSemana;
         private DateTime fechaHoraInicio;
@@ -16,13 +17,14 @@ namespace DSI_PPAI.Entidades
         private List<CambioEstadoTurno> cambiosEstadoTurnos;
         private RecursoTecnologico recursoTecnologico;
 
-        public Turno(DateTime fechaGeneracion, string diaSemana, DateTime fechaHoraInicio, DateTime fechaHoraFin, List<CambioEstadoTurno> cambioEstadoTurno)
+        public Turno(DateTime fechaGeneracion, string diaSemana, DateTime fechaHoraInicio, DateTime fechaHoraFin, List<CambioEstadoTurno> cambioEstadoTurno, int nroTurno)
         {
             this.fechaGeneracion = fechaGeneracion;
             this.diaSemana = diaSemana;
             this.fechaHoraInicio = fechaHoraInicio;
             this.fechaHoraFin = fechaHoraFin;
             this.cambiosEstadoTurnos = cambioEstadoTurno;
+            this.NroTurno = nroTurno;
         }
 
         public DateTime FechaGeneracion { get => fechaGeneracion; set => fechaGeneracion = value; }
@@ -32,6 +34,7 @@ namespace DSI_PPAI.Entidades
         
         public RecursoTecnologico RecursoTecnologico { get => recursoTecnologico; set => recursoTecnologico = value; }
         public List<CambioEstadoTurno> CambioEstadoTurno { get => cambiosEstadoTurnos; set => cambiosEstadoTurnos = value; }
+        public int NroTurno { get => nroTurno; set => nroTurno = value; }
 
         public bool esPosteriorFechaActual(DateTime fechaActual)
         {
@@ -41,8 +44,10 @@ namespace DSI_PPAI.Entidades
         public DTOTurno getDatos()
         {
             DTOTurno turno = new DTOTurno();
+            turno.NroTurno = NroTurno;
             turno.FechaHoraInicio = this.fechaHoraInicio;
             turno.FechaHoraFin = this.fechaHoraFin;
+            turno.DiaSemana = this.DiaSemana;
             foreach (CambioEstadoTurno cambioEstadoTurno in this.cambiosEstadoTurnos)
             {
                 if (cambioEstadoTurno.esEstadoActual())
@@ -52,6 +57,18 @@ namespace DSI_PPAI.Entidades
             }
 
             return turno;
+        }
+
+        public void reservar(DateTime now, Estado reservado)
+        {
+            var cambioEstadoActual = this.cambiosEstadoTurnos.FirstOrDefault(cambioEstado => cambioEstado.esEstadoActual());
+            cambioEstadoActual.setFechaFin(now);
+            this.nuevoCambioEstadoTurno(now, reservado);
+        }
+
+        public void nuevoCambioEstadoTurno(DateTime now, Estado reservado)
+        {
+            this.cambiosEstadoTurnos.Add(new CambioEstadoTurno(now, reservado));
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DSI_PPAI.Entidades;
 using DSI_PPAI.Boundary;
 using DSI_PPAI.DTO;
+using DSI_PPAI.Boundary.InterfacesNotificacion;
 
 namespace DSI_PPAI.Control
 {
@@ -20,7 +21,14 @@ namespace DSI_PPAI.Control
         Sesion sesionActual { get; set; }
         PersonalCientifico cientificoLogueado { get; set; }
         DateTime fechaHoraActual { get; set; }
+        List<Turno> turnosDeRecurso { get; set; }
         List<DTOTurno> turnosDeRecursoSeleccionado { get; set; }
+        Turno turnoSeleccionado { get; set; }
+        DTORecursoTecnologico datosAMostrarRecursoTecnologicoSeleccionado { get; set; }
+        List<TipoNotificacion> tiposNotificacion { get; set; }
+        List<Estado> estados { get; set; }
+        Estado estadoReservado { get; set; }
+        DTOConfirmacionReserva datosReserva { get; set; }
         
 
 
@@ -89,6 +97,7 @@ namespace DSI_PPAI.Control
 
         public void tomarSeleccionRT(DTORecursoTecnologico recursoSeleccionado)
         {
+            this.datosAMostrarRecursoTecnologicoSeleccionado = recursoSeleccionado;
             this.recursoSeleccionado = recursosActivos.FirstOrDefault(rec => rec.NumeroRT.Equals(recursoSeleccionado.NumeroRT));
             this.validarCICientificoRT();
         }
@@ -116,11 +125,10 @@ namespace DSI_PPAI.Control
 
         public void obtenerTurnosRT()
         {
-            List<Turno> turnoList = new List<Turno>();
-            this.obtenerTurnos(this.recursoSeleccionado);
+            this.turnosDeRecurso = this.obtenerTurnos(this.recursoSeleccionado);
             this.turnosDeRecursoSeleccionado = this.recursoSeleccionado.getTurnosRT(this.fechaHoraActual);
 
-            if (turnoList.Count > 0)
+            if (this.turnosDeRecursoSeleccionado.Count > 0)
             {
                 pantallaRegistrarTurnoRT.mostrarTurnosDisponibles(this.turnosDeRecursoSeleccionado);
             }
@@ -128,11 +136,97 @@ namespace DSI_PPAI.Control
             {
                 pantallaRegistrarTurnoRT.mostrarErrorSinTurnos();
             }
+        }
+
+        public void tomarSeleccionTurno(DTOTurno turnoSeleccionado)
+        {
+            this.turnoSeleccionado = this.turnosDeRecurso.FirstOrDefault(turno => turno.NroTurno.Equals(turnoSeleccionado.NroTurno));
+            DTOConfirmacionReserva datosConfirmacion = new DTOConfirmacionReserva();
+            datosConfirmacion.NumeroRT = datosAMostrarRecursoTecnologicoSeleccionado.NumeroRT.ToString();
+            datosConfirmacion.NombreTipo = recursoSeleccionado.getNombreTipoRT();
+            datosConfirmacion.NombreCI = datosAMostrarRecursoTecnologicoSeleccionado.NombreCentroDeInvestigacion;
+            datosConfirmacion.ModeloYMarca = datosAMostrarRecursoTecnologicoSeleccionado.ModeloYMarca;
+            datosConfirmacion.FechaHoraInicio = turnoSeleccionado.FechaHoraInicio;
+            datosConfirmacion.FechaHoraFin = turnoSeleccionado.FechaHoraFin;
+            datosConfirmacion.DiaSemana = turnoSeleccionado.DiaSemana;
+            datosConfirmacion.NombreYApellido = cientificoLogueado.Apellido + ", " + cientificoLogueado.Nombre;
+            datosConfirmacion.Legajo = cientificoLogueado.Legajo.ToString();
+            this.datosReserva = datosConfirmacion;
+
+            List<string> listaTipos = new List<string>();
+            this.tiposNotificacion = obtenerTiposNotificacion();
+            this.tiposNotificacion.ForEach(tipo => listaTipos.Add(tipo.Nombre));
 
 
+            pantallaRegistrarTurnoRT.solicitarConfirmacionReserva(datosConfirmacion, listaTipos);
+        }
+
+        public void tomarConfirmacionReserva(DTOConfirmacionReserva datosConfirmacion, int indiceTipoNotificacion)
+        {
+            TipoNotificacion tipoNotificacionSeleccionado = this.tiposNotificacion[indiceTipoNotificacion];
+            this.reservarTurno();
+        }
+
+        public void reservarTurno()
+        {
+            this.estados = obtenerEstados();
+            foreach (Estado estado in this.estados)
+            {
+                if (estado.esAmbitoTurno())
+                {
+                    if (estado.sosReservable())
+                    {
+                        this.estadoReservado = estado;
+                        this.turnoSeleccionado.reservar(this.fechaHoraActual, this.estadoReservado);
+                        this.enviarNotifMail();
+                    }
+                }
+            }
+        }
+
+        private void enviarNotifMail()
+        {
+            NotificacionMail mail = new NotificacionMail();
+            INotificacion interfazNotificacionMail = mail;
+            interfazNotificacionMail.enviarNotificacion(this.datosReserva);
+
+            this.pantallaRegistrarTurnoRT.Show();
+
+            this.finCU();
+        }
+
+        private void finCU()
+        {
+            pantallaRegistrarTurnoRT.mostrarMensaje("La reserva se realizó con éxito");
+            pantallaRegistrarTurnoRT.ocultarPantalla();
         }
 
         //Aqui se hacen las "Consultas a la base" para obtener los objetos de cada clase
+
+        public List<Estado> obtenerEstados()
+        {
+            List<Estado> estados = new List<Estado>();
+            var estado1 = new Estado("Generado", "", "Turno", true, false);
+            var estado2 = new Estado("Ingresado", "", "RecursoTecnologico", true, false);
+            var estado3 = new Estado("Reservado", "", "Turno", false, true);
+
+            estados.Add(estado1);
+            estados.Add(estado2);
+            estados.Add(estado3);
+
+            return estados;
+        }
+
+        public List<TipoNotificacion> obtenerTiposNotificacion()
+        {
+            var lista = new List<TipoNotificacion>();
+            var tipo1 = new TipoNotificacion(1, "Mail", "");
+            var tipo2 = new TipoNotificacion(2, "WhatsApp", "");
+            lista.Add(tipo1);
+            lista.Add(tipo2);
+
+            return lista;
+        }
 
         public List<TipoRecursoTecnologico> obtenerTiposRecursoTecnologico()
         {
@@ -153,14 +247,14 @@ namespace DSI_PPAI.Control
             var cambiosEstadoTurno = new List<CambioEstadoTurno>();
             cambiosEstadoTurno.Add(new CambioEstadoTurno(DateTime.Parse("01/06/2022 08:00 AM"), new Estado("Generado", "", "Turno", true, false)));
 
-            turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Lunes", DateTime.Parse("27/06/2022 08:00 AM"), DateTime.Parse("27/06/2022 11:00 AM"), cambiosEstadoTurno));
-            turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Martes", DateTime.Parse("28/06/2022 08:00 AM"), DateTime.Parse("28/06/2022 11:00 AM"), cambiosEstadoTurno));
-            turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Miercoles", DateTime.Parse("29/06/2022 08:00 AM"), DateTime.Parse("29/06/2022 11:00 AM"), cambiosEstadoTurno));
-            turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Jueves", DateTime.Parse("30/06/2022 08:00 AM"), DateTime.Parse("30/06/2022 11:00 AM"), cambiosEstadoTurno));
-            turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Viernes", DateTime.Parse("01/07/2022 08:00 AM"), DateTime.Parse("01/07/2022 11:00 AM"), cambiosEstadoTurno));
+            turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Lunes", DateTime.Parse("27/06/2022 08:00 AM"), DateTime.Parse("27/06/2022 11:00 AM"), cambiosEstadoTurno, 1));
+            turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Martes", DateTime.Parse("28/06/2022 08:00 AM"), DateTime.Parse("28/06/2022 11:00 AM"), cambiosEstadoTurno, 2));
+            turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Miercoles", DateTime.Parse("29/06/2022 08:00 AM"), DateTime.Parse("29/06/2022 11:00 AM"), cambiosEstadoTurno, 3));
+            turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Jueves", DateTime.Parse("30/06/2022 08:00 AM"), DateTime.Parse("30/06/2022 11:00 AM"), cambiosEstadoTurno, 4));
+            turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Viernes", DateTime.Parse("01/07/2022 08:00 AM"), DateTime.Parse("01/07/2022 11:00 AM"), cambiosEstadoTurno, 5));
 
 
-            recursoSeleccionado.Turnos = turnosDeRecurso;
+            this.recursoSeleccionado.Turnos = turnosDeRecurso;
 
             return turnosDeRecurso;
         }

@@ -31,24 +31,17 @@
             this.cmb_tipoRecurso = new System.Windows.Forms.ComboBox();
             this.lbl_tipoRecurso = new System.Windows.Forms.Label();
             this.dgvRecursos = new System.Windows.Forms.DataGridView();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.button3 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnSelRecurso = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnSelTurno = new System.Windows.Forms.Button();
             this.dgvTurnos = new System.Windows.Forms.DataGridView();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.dataGridView4 = new System.Windows.Forms.DataGridView();
+            this.btnCancelarReserva = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvRecursos)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTurnos)).BeginInit();
-            this.groupBox3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView4)).BeginInit();
             this.SuspendLayout();
             // 
             // cmb_tipoRecurso
@@ -83,17 +76,6 @@
             this.dgvRecursos.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.habilitarSeleccionRecurso);
             this.dgvRecursos.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvRecursos_CellFormatting);
             this.dgvRecursos.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvRecursos_CellPainting);
-            // 
-            // dataGridView2
-            // 
-            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Location = new System.Drawing.Point(17, 20);
-            this.dataGridView2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.RowHeadersWidth = 51;
-            this.dataGridView2.RowTemplate.Height = 29;
-            this.dataGridView2.Size = new System.Drawing.Size(329, 141);
-            this.dataGridView2.TabIndex = 5;
             // 
             // button3
             // 
@@ -133,7 +115,7 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.button2);
+            this.groupBox2.Controls.Add(this.btnSelTurno);
             this.groupBox2.Controls.Add(this.dgvTurnos);
             this.groupBox2.Location = new System.Drawing.Point(25, 278);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -144,19 +126,21 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Turnos Disponibles";
             // 
-            // button2
+            // btnSelTurno
             // 
-            this.button2.Enabled = false;
-            this.button2.Location = new System.Drawing.Point(598, 220);
-            this.button2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(82, 22);
-            this.button2.TabIndex = 8;
-            this.button2.Text = "Seleccionar";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnSelTurno.Enabled = false;
+            this.btnSelTurno.Location = new System.Drawing.Point(598, 220);
+            this.btnSelTurno.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnSelTurno.Name = "btnSelTurno";
+            this.btnSelTurno.Size = new System.Drawing.Size(82, 22);
+            this.btnSelTurno.TabIndex = 8;
+            this.btnSelTurno.Text = "Seleccionar";
+            this.btnSelTurno.UseVisualStyleBackColor = true;
+            this.btnSelTurno.Click += new System.EventHandler(this.tomarSeleccionTurno);
             // 
             // dgvTurnos
             // 
+            this.dgvTurnos.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvTurnos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvTurnos.Location = new System.Drawing.Point(14, 20);
             this.dgvTurnos.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -165,52 +149,17 @@
             this.dgvTurnos.RowTemplate.Height = 29;
             this.dgvTurnos.Size = new System.Drawing.Size(667, 196);
             this.dgvTurnos.TabIndex = 3;
+            this.dgvTurnos.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.habilitarSeleccionTurno);
             // 
-            // groupBox3
+            // btnCancelarReserva
             // 
-            this.groupBox3.Controls.Add(this.button5);
-            this.groupBox3.Controls.Add(this.button4);
-            this.groupBox3.Controls.Add(this.dataGridView4);
-            this.groupBox3.Controls.Add(this.dataGridView2);
-            this.groupBox3.Location = new System.Drawing.Point(755, 69);
-            this.groupBox3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox3.Size = new System.Drawing.Size(372, 464);
-            this.groupBox3.TabIndex = 10;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Resumen";
-            // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(176, 428);
-            this.button5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(82, 22);
-            this.button5.TabIndex = 10;
-            this.button5.Text = "Cancelar";
-            this.button5.UseVisualStyleBackColor = true;
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(263, 428);
-            this.button4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(82, 22);
-            this.button4.TabIndex = 9;
-            this.button4.Text = "Confirmar";
-            this.button4.UseVisualStyleBackColor = true;
-            // 
-            // dataGridView4
-            // 
-            this.dataGridView4.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView4.Location = new System.Drawing.Point(17, 228);
-            this.dataGridView4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.dataGridView4.Name = "dataGridView4";
-            this.dataGridView4.RowHeadersWidth = 51;
-            this.dataGridView4.RowTemplate.Height = 29;
-            this.dataGridView4.Size = new System.Drawing.Size(329, 196);
-            this.dataGridView4.TabIndex = 6;
+            this.btnCancelarReserva.Location = new System.Drawing.Point(604, 545);
+            this.btnCancelarReserva.Name = "btnCancelarReserva";
+            this.btnCancelarReserva.Size = new System.Drawing.Size(127, 26);
+            this.btnCancelarReserva.TabIndex = 10;
+            this.btnCancelarReserva.Text = "Cancelar Reserva";
+            this.btnCancelarReserva.UseVisualStyleBackColor = true;
+            this.btnCancelarReserva.Click += new System.EventHandler(this.cancelarReserva);
             // 
             // PantallaRegistrarTurnoRT
             // 
@@ -218,8 +167,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.ClientSize = new System.Drawing.Size(1153, 549);
-            this.Controls.Add(this.groupBox3);
+            this.ClientSize = new System.Drawing.Size(743, 583);
+            this.Controls.Add(this.btnCancelarReserva);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button3);
@@ -228,12 +177,9 @@
             this.Name = "PantallaRegistrarTurnoRT";
             this.Text = "Registrar Turno Reserva";
             ((System.ComponentModel.ISupportInitialize)(this.dgvRecursos)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvTurnos)).EndInit();
-            this.groupBox3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView4)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -244,16 +190,12 @@
         private ComboBox cmb_tipoRecurso;
         private Label lbl_tipoRecurso;
         private DataGridView dgvRecursos;
-        private DataGridView dataGridView2;
         private Button button3;
         private GroupBox groupBox1;
         private GroupBox groupBox2;
         private Button btnSelRecurso;
-        private Button button2;
+        private Button btnSelTurno;
         private DataGridView dgvTurnos;
-        private GroupBox groupBox3;
-        private Button button5;
-        private Button button4;
-        private DataGridView dataGridView4;
+        private Button btnCancelarReserva;
     }
 }
