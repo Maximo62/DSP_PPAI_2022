@@ -120,7 +120,15 @@ namespace DSI_PPAI.Control
             this.obtenerTurnos(this.recursoSeleccionado);
             this.turnosDeRecursoSeleccionado = this.recursoSeleccionado.getTurnosRT(this.fechaHoraActual);
 
-            pantallaRegistrarTurnoRT.mostrarTurnosDisponibles(this.turnosDeRecursoSeleccionado);
+            if (turnoList.Count > 0)
+            {
+                pantallaRegistrarTurnoRT.mostrarTurnosDisponibles(this.turnosDeRecursoSeleccionado);
+            }
+            else
+            {
+                pantallaRegistrarTurnoRT.mostrarErrorSinTurnos();
+            }
+
 
         }
 

@@ -100,6 +100,11 @@ namespace DSI_PPAI.Boundary
             MessageBox.Show("El recurso seleccionado no pertenece a su centro de investigación.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        public void mostrarErrorSinTurnos()
+        {
+            MessageBox.Show("No existen turnos disponibles para el recurso tecnológico seleccionado.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
         private void dgvRecursos_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (e.RowIndex == 0)
@@ -157,6 +162,16 @@ namespace DSI_PPAI.Boundary
         }
 
         private void btnSelRecurso_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void habilitarSeleccionRecurso(object sender, DataGridViewCellEventArgs e)
+        {
+            btnSelRecurso.Enabled = true;
+        }
+
+        private void monthCalendar1_DateChanged(object sender, DateRangeEventArgs e)
         {
 
         }

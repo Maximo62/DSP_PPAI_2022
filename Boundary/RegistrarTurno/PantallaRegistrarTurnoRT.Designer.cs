@@ -80,6 +80,7 @@
             this.dgvRecursos.RowTemplate.Height = 29;
             this.dgvRecursos.Size = new System.Drawing.Size(667, 141);
             this.dgvRecursos.TabIndex = 2;
+            this.dgvRecursos.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.habilitarSeleccionRecurso);
             this.dgvRecursos.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvRecursos_CellFormatting);
             this.dgvRecursos.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvRecursos_CellPainting);
             // 
@@ -120,6 +121,7 @@
             // 
             // btnSelRecurso
             // 
+            this.btnSelRecurso.Enabled = false;
             this.btnSelRecurso.Location = new System.Drawing.Point(598, 165);
             this.btnSelRecurso.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnSelRecurso.Name = "btnSelRecurso";
@@ -144,6 +146,7 @@
             // 
             // button2
             // 
+            this.button2.Enabled = false;
             this.button2.Location = new System.Drawing.Point(598, 220);
             this.button2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button2.Name = "button2";
