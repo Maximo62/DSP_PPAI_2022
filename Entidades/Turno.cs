@@ -41,6 +41,11 @@ namespace DSI_PPAI.Entidades
             return fechaActual < fechaHoraInicio;
         }
 
+        public bool esPosteriorPlazoDefinido(DateTime fechaHoraPlazo)
+        {
+            return fechaHoraPlazo <= fechaHoraInicio;
+        }
+
         public DTOTurno getDatos()
         {
             DTOTurno turno = new DTOTurno();

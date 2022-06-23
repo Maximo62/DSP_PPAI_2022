@@ -130,9 +130,27 @@ namespace DSI_PPAI.Entidades {
             return turnos;
         }
 
+        public List<DTOTurno> getTurnosRTDesdePlazo(DateTime fechaHoraPlazo)
+        {
+            List<DTOTurno> turnos = new List<DTOTurno>();
+            foreach (Turno turno in this.turnos)
+            {
+                if (turno.esPosteriorPlazoDefinido(fechaHoraPlazo))
+                {
+                    turnos.Add(turno.getDatos());
+                }
+            }
+            return turnos;
+        }
+
         public string getNombreTipoRT()
         {
             return this.tipoRecursoTecnologico.Nombre;
+        }
+
+        public int obtenerPlazoMinimoReservaCI()
+        {
+            return this.centroDeInvestigacion.TiempoAntelacionReserva;
         }
     }
 

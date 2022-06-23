@@ -136,17 +136,19 @@ namespace DSI_PPAI.Boundary
             {
                 return;
             }
-
-            if (IsRepeatedCellValue(e.RowIndex, e.ColumnIndex))
+            if (e.ColumnIndex == 1)
             {
-                e.Value = string.Empty;
-                e.FormattingApplied = true;
+                if (IsRepeatedCellValue(e.RowIndex, e.ColumnIndex))
+                {
+                    e.Value = string.Empty;
+                    e.FormattingApplied = true;
+                }
             }
         }
 
         private bool IsRepeatedCellValue(int rowIndex, int colIndex)
         {
-            DataGridViewCell currCell = dgvRecursos.CurrentRow.Cells[colIndex]; /*Rows[rowIndex].Cells[colIndex];*/
+            DataGridViewCell currCell = dgvRecursos.Rows[rowIndex].Cells[colIndex]; /*Rows[rowIndex].Cells[colIndex];*/
             DataGridViewCell prevCell = dgvRecursos.Rows[rowIndex - 1].Cells[colIndex]; /*Rows[rowIndex - 1].Cells[colIndex];*/
 
             if (currCell.ColumnIndex == 1)
@@ -188,12 +190,19 @@ namespace DSI_PPAI.Boundary
 
         private void habilitarSeleccionRecurso(object sender, DataGridViewCellEventArgs e)
         {
+            dgvTurnos.DataSource = null;
             btnSelRecurso.Enabled = true;
         }
 
         private void habilitarSeleccionTurno(object sender, DataGridViewCellEventArgs e)
         {
-            btnSelTurno.Enabled = true;
+            if (dgvTurnos.CurrentRow.Cells[2].Value.Equals("Disponible"))
+            {
+                btnSelTurno.Enabled = true;
+            } else
+            {
+                btnSelTurno.Enabled = false;
+            }
         }
 
         public void mostrarMensaje(string mensaje)
@@ -209,6 +218,23 @@ namespace DSI_PPAI.Boundary
         private void cancelarReserva(object sender, EventArgs e)
         {
             this.Dispose();
+        }
+
+        private void dgvTurnos_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            foreach (DataGridViewRow myRow in dgvTurnos.Rows)
+            {
+                if (myRow.Cells[2].Value.Equals("Disponible"))
+                {
+                    myRow.DefaultCellStyle.BackColor = Color.LightSkyBlue;
+                } else if (myRow.Cells[2].Value.Equals("Pendiente de Confirmacion"))
+                {
+                    myRow.DefaultCellStyle.BackColor = Color.LightSteelBlue;
+                } else
+                {
+                    myRow.DefaultCellStyle.BackColor = Color.IndianRed;
+                }
+            }
         }
     }
 }

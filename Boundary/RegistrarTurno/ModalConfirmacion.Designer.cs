@@ -318,6 +318,7 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label1);
             this.Name = "ModalConfirmacion";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Confirmación de Reserva";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
