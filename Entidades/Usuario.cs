@@ -25,5 +25,10 @@ namespace DSI_PPAI.Entidades
         public string UsuarioNombre { get => usuarioNombre; set => usuarioNombre = value; }
         public bool Habilitado { get => habilitado; set => habilitado = value; }
         public PersonalCientifico PersonalCientifico { get => personalCientifico; set => personalCientifico = value; }
+
+        public PersonalCientifico getPersonalCientifico()
+        {
+            return this.personalCientifico;
+        }
     }
 }

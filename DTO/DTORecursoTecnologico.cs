@@ -12,10 +12,12 @@ namespace DSI_PPAI.DTO
         private string nombreCentroDeInvestigacion;
         private string nombreEstadoActual;
         private string modeloYMarca;
+        private string nombreTipoRT;
 
         public int NumeroRT { get => numeroRT; set => numeroRT = value; }
         public string NombreCentroDeInvestigacion { get => nombreCentroDeInvestigacion; set => nombreCentroDeInvestigacion = value; }
         public string NombreEstadoActual { get => nombreEstadoActual; set => nombreEstadoActual = value; }
         public string ModeloYMarca { get => modeloYMarca; set => modeloYMarca = value; }
+        public string NombreTipoRT { get => nombreTipoRT; set => nombreTipoRT = value; }
     }
 }

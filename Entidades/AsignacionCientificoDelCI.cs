@@ -12,16 +12,20 @@ namespace DSI_PPAI.Entidades
         private DateTime fechaHasta;
         private PersonalCientifico personalCientifico;
 
-        public AsignacionCientificoDelCI(DateTime fechaDesde, DateTime fechaHasta, PersonalCientifico personalCientifico)
+        public AsignacionCientificoDelCI(DateTime fechaDesde, PersonalCientifico personalCientifico)
         {
             this.fechaDesde = fechaDesde;
-            this.fechaHasta = fechaHasta;
             this.personalCientifico = personalCientifico;
         }
 
         public DateTime FechaDesde { get => fechaDesde; set => fechaDesde = value; }
         public DateTime FechaHasta { get => fechaHasta; set => fechaHasta = value; }
         public PersonalCientifico PersonalCientifico { get => personalCientifico ; set => personalCientifico = value; }
+
+        public bool esTuCientifico(PersonalCientifico cientificoLogueado)
+        {
+            return this.personalCientifico.Legajo.Equals(cientificoLogueado.Legajo);
+        }
     }
 }
     
