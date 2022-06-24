@@ -28,7 +28,7 @@ namespace DSI_PPAI.Boundary.RegistrarTurno
             lblRecursoTipo.Text = datosConfirmacionReserva.NombreTipo;
             lblRecursoModeloMarca.Text = datosConfirmacionReserva.ModeloYMarca;
             lblRecursoCI.Text = datosConfirmacionReserva.NombreCI;
-            lblDiaFecha.Text = datosConfirmacionReserva.DiaSemana + " - " + datosConfirmacionReserva.FechaHoraInicio.Date.ToString();
+            lblDiaFecha.Text = datosConfirmacionReserva.DiaSemana + " - " + datosConfirmacionReserva.FechaHoraInicio.Date.ToShortDateString();
             lblHoraInicio.Text = datosConfirmacionReserva.FechaHoraInicio.TimeOfDay.ToString();
             lblHoraFin.Text = datosConfirmacionReserva.FechaHoraFin.TimeOfDay.ToString();
             lblNombreCientifico.Text = datosConfirmacionReserva.NombreYApellido;
@@ -51,6 +51,7 @@ namespace DSI_PPAI.Boundary.RegistrarTurno
 
         private void ocultarPantalla(object sender, EventArgs e)
         {
+            MessageBox.Show("La reserva se canceló correctamente.", "Informacion", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Dispose();
         }
     }

@@ -48,6 +48,7 @@ namespace DSI_PPAI.Control
 
             foreach (TipoRecursoTecnologico tipo in this.tipoRecursoTecnologicos)
             {
+                // aclarar metodos accesores
                 vectorTiposRT.Add(tipo.Nombre);
             }
 
@@ -76,7 +77,10 @@ namespace DSI_PPAI.Control
                 // se le pregunta a cada recurso tecnologico registrado si el tipo seleccionado es su tipo de recurso, si lo es lo agregamos a la lista de recursos activos
                 if(recurso.esTuTipoRT(tipoRecurso.Nombre))
                 {
-                    this.recursosActivos.Add(recurso);
+                    if (recurso.sosRTActivo())
+                    {
+                        this.recursosActivos.Add(recurso);
+                    }
                 }
             }
             this.buscarDatosRTActivos();
@@ -117,7 +121,7 @@ namespace DSI_PPAI.Control
             //obtenemos el cientifico logueado a partir de la sesion actual
             this.cientificoLogueado = this.sesionActual.obtenerUsuarioLogueado();
             
-            // consultamos si el cientifico logueado pertenece al recurso
+            // consultamos si el cientifico logueado pertenece al CENTRO DE INVESTIGACION del RECURSO
             if (this.recursoSeleccionado.esCientificoDeCI(this.cientificoLogueado))
             {
                 // si pertenece buscamos turnos desde la fecha actual
@@ -185,6 +189,7 @@ namespace DSI_PPAI.Control
         public void tomarSeleccionTurno(DTOTurno turnoSeleccionado)
         {
             this.turnoSeleccionado = this.turnosDeRecurso.FirstOrDefault(turno => turno.NroTurno.Equals(turnoSeleccionado.NroTurno));
+
             DTOConfirmacionReserva datosConfirmacion = new DTOConfirmacionReserva();
             datosConfirmacion.NumeroRT = datosAMostrarRecursoTecnologicoSeleccionado.NumeroRT.ToString();
             datosConfirmacion.NombreTipo = recursoSeleccionado.getNombreTipoRT();
@@ -270,10 +275,12 @@ namespace DSI_PPAI.Control
         public List<TipoNotificacion> obtenerTiposNotificacion()
         {
             var lista = new List<TipoNotificacion>();
-            var tipo1 = new TipoNotificacion(1, "Mail", "");
+            var tipo1 = new TipoNotificacion(1, "Email", "");
             var tipo2 = new TipoNotificacion(2, "WhatsApp", "");
+            var tipo3 = new TipoNotificacion(3, "Email y WhatsApp", "");
             lista.Add(tipo1);
             lista.Add(tipo2);
+            lista.Add(tipo3);
 
             return lista;
         }

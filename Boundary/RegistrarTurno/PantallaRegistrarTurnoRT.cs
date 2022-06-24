@@ -48,8 +48,15 @@ namespace DSI_PPAI.Boundary
 
         private void tomarSeleccionTipoRT(object sender, EventArgs e)
         {
-            int indiceTipoSeleccionado = cmb_tipoRecurso.SelectedIndex;
-            gestorReservaTurnoRT.tomarSeleccionTipoRT(indiceTipoSeleccionado);
+            if (!cmb_tipoRecurso.SelectedIndex.Equals(-1))
+            {
+                int indiceTipoSeleccionado = cmb_tipoRecurso.SelectedIndex;
+                dgvTurnos.DataSource = null;
+                gestorReservaTurnoRT.tomarSeleccionTipoRT(indiceTipoSeleccionado);
+            } else
+            {
+                MessageBox.Show("Debe seleccionar un tipo de Recurso Tecnológico para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
             
         }
 
@@ -65,6 +72,8 @@ namespace DSI_PPAI.Boundary
             dgvRecursos.Columns["nombreEstadoActual"].DisplayIndex = 3;
             dgvRecursos.Columns["nombreEstadoActual"].HeaderText = "Estado Actual";
             dgvRecursos.Columns["nombreTipoRT"].Visible = false;
+
+            dgvRecursos.ClearSelection();
 
             if (dgvRecursos.Rows.Count.Equals(0))
             {
@@ -92,6 +101,7 @@ namespace DSI_PPAI.Boundary
             dgvTurnos.Columns["nombreEstadoActual"].DisplayIndex = 2;
             dgvTurnos.Columns["nombreEstadoActual"].HeaderText = "Estado Actual";
             dgvTurnos.Columns["diaSemana"].Visible = false;
+            dgvTurnos.ClearSelection();
 
             if (dgvTurnos.Rows.Count.Equals(0))
             {

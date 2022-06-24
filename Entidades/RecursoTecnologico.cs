@@ -68,12 +68,7 @@ namespace DSI_PPAI.Entidades {
         // verificamos si el tipo de recurso seleccionado es el tipo del recurso que se esta comprobando actualmente
         public bool esTuTipoRT(string nombreTipoRT)
         {
-            if (this.TipoRecursoTecnologico.Nombre.Equals(nombreTipoRT))
-            {
-                // Aqui comprobamos si el recurso es activo
-                return this.sosRTActivo();
-            }
-            return false;
+            return this.TipoRecursoTecnologico.Nombre.Equals(nombreTipoRT);
         }
         // Aqui consultamos el estado actual del recurso, consultando si es reservable
         public bool sosRTActivo()
