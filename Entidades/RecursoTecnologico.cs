@@ -65,16 +65,17 @@ namespace DSI_PPAI.Entidades {
         public CentroDeInvestigacion CentroDeInvestigacion { get => centroDeInvestigacion; set => centroDeInvestigacion = value; }
 
 
-
+        // verificamos si el tipo de recurso seleccionado es el tipo del recurso que se esta comprobando actualmente
         public bool esTuTipoRT(string nombreTipoRT)
         {
             if (this.TipoRecursoTecnologico.Nombre.Equals(nombreTipoRT))
             {
+                // Aqui comprobamos si el recurso es activo
                 return this.sosRTActivo();
             }
             return false;
         }
-
+        // Aqui consultamos el estado actual del recurso, consultando si es reservable
         public bool sosRTActivo()
         {
             foreach (CambioEstadoRT cambioEstado in this.CambiosEstadoRT)
@@ -130,9 +131,27 @@ namespace DSI_PPAI.Entidades {
             return turnos;
         }
 
+        public List<DTOTurno> getTurnosRTDesdePlazo(DateTime fechaHoraPlazo)
+        {
+            List<DTOTurno> turnos = new List<DTOTurno>();
+            foreach (Turno turno in this.turnos)
+            {
+                if (turno.esPosteriorPlazoDefinido(fechaHoraPlazo))
+                {
+                    turnos.Add(turno.getDatos());
+                }
+            }
+            return turnos;
+        }
+
         public string getNombreTipoRT()
         {
             return this.tipoRecursoTecnologico.Nombre;
+        }
+
+        public int obtenerPlazoMinimoReservaCI()
+        {
+            return this.centroDeInvestigacion.TiempoAntelacionReserva;
         }
     }
 

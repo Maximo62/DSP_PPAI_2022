@@ -41,6 +41,11 @@ namespace DSI_PPAI.Entidades
             return fechaActual < fechaHoraInicio;
         }
 
+        public bool esPosteriorPlazoDefinido(DateTime fechaHoraPlazo)
+        {
+            return fechaHoraPlazo <= fechaHoraInicio;
+        }
+
         public DTOTurno getDatos()
         {
             DTOTurno turno = new DTOTurno();
@@ -58,7 +63,7 @@ namespace DSI_PPAI.Entidades
 
             return turno;
         }
-
+        // generamos la reserva del turno seteandole una fechaFin al cambio de estado actual y creando un nuevo cambio de estado con el estadoReservado que buscamos antes
         public void reservar(DateTime now, Estado reservado)
         {
             var cambioEstadoActual = this.cambiosEstadoTurnos.FirstOrDefault(cambioEstado => cambioEstado.esEstadoActual());
@@ -66,6 +71,7 @@ namespace DSI_PPAI.Entidades
             this.nuevoCambioEstadoTurno(now, reservado);
         }
 
+        // llamamos al new del cambio de estado del turno
         public void nuevoCambioEstadoTurno(DateTime now, Estado reservado)
         {
             this.cambiosEstadoTurnos.Add(new CambioEstadoTurno(now, reservado));

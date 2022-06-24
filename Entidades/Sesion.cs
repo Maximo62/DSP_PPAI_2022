@@ -22,6 +22,7 @@ namespace DSI_PPAI.Entidades
         public DateTime? FechaHoraFin { get => fechaHoraFin; set => fechaHoraFin = value; }
         public Usuario Usuario { get => usuario; set => usuario = value; }
 
+        // obtenemos el objeto personalCientifico de la sesion
         public PersonalCientifico obtenerUsuarioLogueado()
         {
             return this.usuario.getPersonalCientifico();
