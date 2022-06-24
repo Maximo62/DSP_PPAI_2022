@@ -59,8 +59,15 @@ namespace DSI_PPAI.Control
 
         public void tomarSeleccionTipoRT(int indice)
         {
-            this.tipoRecursoSeleccionado = tipoRecursoTecnologicos[indice];
-            this.buscarRTActivos(tipoRecursoSeleccionado);
+            if (indice != -1)
+            {
+                this.tipoRecursoSeleccionado = tipoRecursoTecnologicos[indice];
+                this.buscarRTActivos(tipoRecursoSeleccionado);
+            } else
+            {
+                MessageBox.Show("Por favor, seleccione un tipo de recurso!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            
             
         }
 
