@@ -120,15 +120,8 @@ namespace DSI_PPAI.Boundary
             gestorReservaTurnoRT.tomarConfirmacionReserva(datosConfirmacion, indiceTipoNotificacion);
         }
 
-        public void mostrarErrorCientifico()
-        {
-            MessageBox.Show("El recurso seleccionado no pertenece a su centro de investigación.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
 
-        public void mostrarErrorSinTurnos()
-        {
-            MessageBox.Show("No existen turnos disponibles para el recurso tecnológico seleccionado.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
+        #region Agrupamos recursos segun centro de investigacion
 
         private void dgvRecursos_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
@@ -188,6 +181,21 @@ namespace DSI_PPAI.Boundary
             }
         }
 
+        #endregion
+
+        #region metodos de soporte de la pantalla para mejorar la usabilidad
+        public void mostrarErrorCientifico()
+        {
+            MessageBox.Show("El recurso seleccionado no pertenece a su centro de investigación.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        public void mostrarErrorSinTurnos()
+        {
+            MessageBox.Show("No existen turnos disponibles para el recurso tecnológico seleccionado.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+       
+
         private void habilitarSeleccionRecurso(object sender, DataGridViewCellEventArgs e)
         {
             dgvTurnos.DataSource = null;
@@ -220,6 +228,10 @@ namespace DSI_PPAI.Boundary
             this.Dispose();
         }
 
+        #endregion
+
+        #region Asignamos color a turnos segun su disponibilidad
+
         private void dgvTurnos_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             foreach (DataGridViewRow myRow in dgvTurnos.Rows)
@@ -236,5 +248,7 @@ namespace DSI_PPAI.Boundary
                 }
             }
         }
+
+        #endregion
     }
 }

@@ -64,12 +64,16 @@ namespace DSI_PPAI.Control
             
         }
 
+        /* Este metodo buscará todos los recursos tecnologicos 
+          activos segun el tipo de recurso seleccionado, 
+          revisando si el turno es reservable */
         public void buscarRTActivos(TipoRecursoTecnologico tipoRecurso)
         {
             this.recursosActivos = new List<RecursoTecnologico>();
             var recursos = obtenerRecursosTecnologicos();
             foreach (RecursoTecnologico recurso in recursos)
             {
+                // se le pregunta a cada recurso tecnologico registrado si el tipo seleccionado es su tipo de recurso, si lo es lo agregamos a la lista de recursos activos
                 if(recurso.esTuTipoRT(tipoRecurso.Nombre))
                 {
                     this.recursosActivos.Add(recurso);
@@ -79,12 +83,15 @@ namespace DSI_PPAI.Control
              
         }
 
+        /* Aqui buscaremos para cada recurso activo sus datos*/
         public void buscarDatosRTActivos()
         {
             this.recursosActivosAMostrar = new List<DTORecursoTecnologico>();
             foreach (RecursoTecnologico recurso in this.recursosActivos)
             {
                 var recursoAMostrar = new DTORecursoTecnologico();
+
+                // AQUI EXPLICAR COMO SON LOS METODOS DE ACCESO EN C# MAYUS --> ACCESO, MINUS --> ATRIBUTO
                 recursoAMostrar.NumeroRT = recurso.NumeroRT;
                 recursoAMostrar.NombreCentroDeInvestigacion = recurso.getCentroDeInvestigacion();
                 recursoAMostrar.NombreEstadoActual = recurso.getEstadoActual();
@@ -103,16 +110,22 @@ namespace DSI_PPAI.Control
             this.validarCICientificoRT();
         }
 
+        /* Aqui validaremos si el cientifico logueado pertenece 
+         * al centro de investigacion del recurso seleccionado */
         public void validarCICientificoRT()
         {
+            //obtenemos el cientifico logueado a partir de la sesion actual
             this.cientificoLogueado = this.sesionActual.obtenerUsuarioLogueado();
-
+            
+            // consultamos si el cientifico logueado pertenece al recurso
             if (this.recursoSeleccionado.esCientificoDeCI(this.cientificoLogueado))
             {
+                // si pertenece buscamos turnos desde la fecha actual
                 this.obtenerFechaHoraActual();
             }
             else
             {
+                // si no pertenece obtenemos los turnos desde el plazo de antelacion definido en el centro de investigacion al que pertenece el recurso
                 this.obtenerTurnosDesdePlazo();
             }
             
@@ -124,6 +137,7 @@ namespace DSI_PPAI.Control
             this.obtenerTurnosRT();
         }
 
+        // obtenemos los turnos desde el plazo de antelacion definido en el centro de investigacion al que pertenece el recurso
         public void obtenerTurnosDesdePlazo()
         {
             this.turnosDeRecurso = this.obtenerTurnos(this.recursoSeleccionado);
@@ -144,10 +158,15 @@ namespace DSI_PPAI.Control
             this.fechaHoraPlazoMinimo = DateTime.Now.AddDays(plazo);
         }
 
+        /* obtendremos los turnos para el recurso seleccionado
+         * SOLO SI EL CIENTIFICO PERTENECE AL CENTRO DE INVESTIGACION
+           obtiene turnos desde el dia de la fecha*/ 
         public void obtenerTurnosRT()
         {
             this.turnosDeRecurso = this.obtenerTurnos(this.recursoSeleccionado);
             this.turnosDeRecursoSeleccionado = this.recursoSeleccionado.getTurnosRT(this.fechaHoraActual);
+
+            // Ordenamos los turnos segun su fechaHoraInicio
             this.turnosDeRecursoSeleccionado.Sort((p, q) => p.FechaHoraInicio.CompareTo(q.FechaHoraInicio));
 
 
@@ -162,6 +181,7 @@ namespace DSI_PPAI.Control
             }
         }
 
+        // tomamos el turno seleccionado y generamos el resumen de la reserva
         public void tomarSeleccionTurno(DTOTurno turnoSeleccionado)
         {
             this.turnoSeleccionado = this.turnosDeRecurso.FirstOrDefault(turno => turno.NroTurno.Equals(turnoSeleccionado.NroTurno));
@@ -175,13 +195,13 @@ namespace DSI_PPAI.Control
             datosConfirmacion.DiaSemana = turnoSeleccionado.DiaSemana;
             datosConfirmacion.NombreYApellido = cientificoLogueado.Apellido + ", " + cientificoLogueado.Nombre;
             datosConfirmacion.Legajo = cientificoLogueado.Legajo.ToString();
-            this.datosReserva = datosConfirmacion;
+            this.datosReserva = datosConfirmacion; //guardamos los datos de la reserva
 
             List<string> listaTipos = new List<string>();
             this.tiposNotificacion = obtenerTiposNotificacion();
             this.tiposNotificacion.ForEach(tipo => listaTipos.Add(tipo.Nombre));
 
-
+            // pedimos a la pantalla que solicite la confirmacion de la reserva y el tipo de notificacion deseado
             pantallaRegistrarTurnoRT.solicitarConfirmacionReserva(datosConfirmacion, listaTipos);
         }
 
@@ -191,6 +211,10 @@ namespace DSI_PPAI.Control
             this.reservarTurno();
         }
 
+        /* generamos la reserva del turno
+         * obtenemos el estadoresevado para asignarlo al turno seleccionado
+         * llamamos al metodo reservar() del turno para generar el cambio de estado
+           enviamos la notificacion deseada */
         public void reservarTurno()
         {
             this.estados = obtenerEstados();
@@ -225,6 +249,8 @@ namespace DSI_PPAI.Control
             pantallaRegistrarTurnoRT.ocultarPantalla();
         }
 
+        #region "consultas" a la base ---> generamos los objetos simulando consultas
+
         //Aqui se hacen las "Consultas a la base" para obtener los objetos de cada clase
 
         public List<Estado> obtenerEstados()
@@ -240,7 +266,7 @@ namespace DSI_PPAI.Control
 
             return estados;
         }
-
+        // generamos los objetos con los tipos de notificacion seleccionables
         public List<TipoNotificacion> obtenerTiposNotificacion()
         {
             var lista = new List<TipoNotificacion>();
@@ -428,5 +454,7 @@ namespace DSI_PPAI.Control
             lista.Add(recurso7);
             return lista;
         }
+
+        #endregion
     }
 }
