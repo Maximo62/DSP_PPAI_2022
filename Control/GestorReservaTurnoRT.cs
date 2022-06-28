@@ -16,7 +16,7 @@ namespace DSI_PPAI.Control
         IList<TipoRecursoTecnologico> tipoRecursoTecnologicos { get; set; }
         TipoRecursoTecnologico tipoRecursoSeleccionado { get; set; }
         List<RecursoTecnologico> recursosActivos { get; set; }
-        List<DTORecursoTecnologico> recursosActivosAMostrar { get; set; }
+        List<Dictionary<string, string>> recursosActivosAMostrar { get; set; }
         RecursoTecnologico? recursoSeleccionado { get; set; }
         Sesion sesionActual { get; set; }
         PersonalCientifico cientificoLogueado { get; set; }
@@ -60,9 +60,31 @@ namespace DSI_PPAI.Control
 
         public void tomarSeleccionTipoRT(int indice)
         {
-            this.tipoRecursoSeleccionado = tipoRecursoTecnologicos[indice];
-            this.buscarRTActivos(tipoRecursoSeleccionado);
+            if (!indice.Equals(0))
+            {
+                this.tipoRecursoSeleccionado = tipoRecursoTecnologicos[indice];
+                this.buscarRTActivos(tipoRecursoSeleccionado);
+            } else
+            {
+                this.buscarTodosRTActivos();
+            }
             
+        }
+
+        public void buscarTodosRTActivos()
+        {
+            this.recursosActivos = new List<RecursoTecnologico>();
+            var recursos = obtenerRecursosTecnologicos();
+            foreach (RecursoTecnologico recurso in recursos)
+            {
+                if (recurso.sosRTActivo())
+                {
+                    this.recursosActivos.Add(recurso);
+                }
+            }
+
+            this.buscarDatosRTActivos();
+
         }
 
         /* Este metodo buscará todos los recursos tecnologicos 
@@ -90,19 +112,19 @@ namespace DSI_PPAI.Control
         /* Aqui buscaremos para cada recurso activo sus datos*/
         public void buscarDatosRTActivos()
         {
-            this.recursosActivosAMostrar = new List<DTORecursoTecnologico>();
+            this.recursosActivosAMostrar = new List<Dictionary<string, string>>();
             foreach (RecursoTecnologico recurso in this.recursosActivos)
             {
-                var recursoAMostrar = new DTORecursoTecnologico();
-
                 // AQUI EXPLICAR COMO SON LOS METODOS DE ACCESO EN C# MAYUS --> ACCESO, MINUS --> ATRIBUTO
-                recursoAMostrar.NumeroRT = recurso.NumeroRT;
-                recursoAMostrar.NombreCentroDeInvestigacion = recurso.getCentroDeInvestigacion();
-                recursoAMostrar.NombreEstadoActual = recurso.getEstadoActual();
-                recursoAMostrar.ModeloYMarca = recurso.getModeloYMarca();
+                Dictionary<string, string> recursoAMostrar = new Dictionary<string, string>();
+                recursoAMostrar.Add("Centro de Investigacion", recurso.getCentroDeInvestigacion());
+                recursoAMostrar.Add("Numero de Recurso", recurso.NumeroRT.ToString());
+                recursoAMostrar.Add("Modelo y Marca", recurso.getModeloYMarca());
+                recursoAMostrar.Add("Estado", recurso.getEstadoActual());
 
                 this.recursosActivosAMostrar.Add(recursoAMostrar);
             }
+
             this.pantallaRegistrarTurnoRT.mostrarDatosRTActivos(this.recursosActivosAMostrar);
 
         }

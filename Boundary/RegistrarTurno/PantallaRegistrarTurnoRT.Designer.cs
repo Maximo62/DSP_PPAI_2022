@@ -46,6 +46,7 @@
             // 
             // cmb_tipoRecurso
             // 
+            this.cmb_tipoRecurso.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmb_tipoRecurso.FormattingEnabled = true;
             this.cmb_tipoRecurso.Location = new System.Drawing.Point(39, 34);
             this.cmb_tipoRecurso.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);

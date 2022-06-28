@@ -42,36 +42,27 @@ namespace DSI_PPAI.Boundary
 
         public void pedirSeleccionTipoRT(String[] tipos)
         {
+            cmb_tipoRecurso.Items.Add("Todos");
             cmb_tipoRecurso.Items.AddRange(tipos);
             cmb_tipoRecurso.Refresh();
+            cmb_tipoRecurso.SelectedIndex = 0;
         }
 
         private void tomarSeleccionTipoRT(object sender, EventArgs e)
         {
-            if (!cmb_tipoRecurso.SelectedIndex.Equals(-1))
-            {
-                int indiceTipoSeleccionado = cmb_tipoRecurso.SelectedIndex;
-                dgvTurnos.DataSource = null;
-                gestorReservaTurnoRT.tomarSeleccionTipoRT(indiceTipoSeleccionado);
-            } else
-            {
-                MessageBox.Show("Debe seleccionar un tipo de Recurso Tecnológico para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            int indiceTipoSeleccionado = cmb_tipoRecurso.SelectedIndex;
+            dgvTurnos.DataSource = null;
+            gestorReservaTurnoRT.tomarSeleccionTipoRT(indiceTipoSeleccionado);
             
         }
 
-        public void mostrarDatosRTActivos(List<DTORecursoTecnologico> recursosActivos)
+        public void mostrarDatosRTActivos(List<Dictionary<string, string>> recursosActivos)
         {
-            dgvRecursos.DataSource = recursosActivos;
-            dgvRecursos.Columns["nombreCentroDeInvestigacion"].DisplayIndex = 0;
-            dgvRecursos.Columns["nombreCentroDeInvestigacion"].HeaderText = "Centro de Investigacion";
-            dgvRecursos.Columns["numeroRT"].DisplayIndex = 1;
-            dgvRecursos.Columns["numeroRT"].HeaderText = "Numero Recurso";
-            dgvRecursos.Columns["modeloYMarca"].DisplayIndex = 2;
-            dgvRecursos.Columns["modeloYMarca"].HeaderText = "Modelo y Marca";
-            dgvRecursos.Columns["nombreEstadoActual"].DisplayIndex = 3;
-            dgvRecursos.Columns["nombreEstadoActual"].HeaderText = "Estado Actual";
-            dgvRecursos.Columns["nombreTipoRT"].Visible = false;
+            DataTable table = ToDataTable(recursosActivos);
+            dgvRecursos.DataSource = table;
+
+
+            dgvRecursos.Refresh();
 
             dgvRecursos.ClearSelection();
 
@@ -79,6 +70,28 @@ namespace DSI_PPAI.Boundary
             {
                 MessageBox.Show("No se encontraron recursos tecnológicos para el tipo seleccionado.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+
+        DataTable ToDataTable(List<Dictionary<string, string>> list)
+        {
+            DataTable result = new DataTable();
+            if (list.Count == 0)
+                return result;
+
+            var columnNames = list.SelectMany(dict => dict.Keys).Distinct();
+            result.Columns.AddRange(columnNames.Select(c => new DataColumn(c)).ToArray());
+            foreach (Dictionary<string, string> item in list)
+            {
+                var row = result.NewRow();
+                foreach (var key in item.Keys)
+                {
+                    row[key] = item[key];
+                }
+
+                result.Rows.Add(row);
+            }
+
+            return result;
         }
 
         public void tomarSeleccionRT(object sender, EventArgs e)
@@ -132,6 +145,27 @@ namespace DSI_PPAI.Boundary
 
 
         #region Agrupamos recursos segun centro de investigacion
+               
+
+        private void dgvRecursos_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            e.AdvancedBorderStyle.Bottom =
+               DataGridViewAdvancedCellBorderStyle.None;
+
+            // Ignore column and row headers and first row
+            if (e.RowIndex < 1 || e.ColumnIndex < 0)
+                return;
+
+            if (IsRepeatedCellValue(e.RowIndex, e.ColumnIndex))
+            {
+                e.AdvancedBorderStyle.Top =
+                   DataGridViewAdvancedCellBorderStyle.None;
+            }
+            else
+            {
+                e.AdvancedBorderStyle.Top = e.AdvancedBorderStyle.Top;
+            }
+        }
 
         private void dgvRecursos_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
@@ -171,29 +205,12 @@ namespace DSI_PPAI.Boundary
             }
         }
 
-        private void dgvRecursos_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
-        {
-            e.AdvancedBorderStyle.Bottom =
-               DataGridViewAdvancedCellBorderStyle.None;
-
-            // Ignore column and row headers and first row
-            if (e.RowIndex < 1 || e.ColumnIndex < 0)
-                return;
-
-            if (IsRepeatedCellValue(e.RowIndex, e.ColumnIndex))
-            {
-                e.AdvancedBorderStyle.Top =
-                   DataGridViewAdvancedCellBorderStyle.None;
-            }
-            else
-            {
-                e.AdvancedBorderStyle.Top = e.AdvancedBorderStyle.Top;
-            }
-        }
-
         #endregion
 
         #region metodos de soporte de la pantalla para mejorar la usabilidad
+
+
+
         public void mostrarErrorCientifico()
         {
             MessageBox.Show("El recurso seleccionado no pertenece a su centro de investigación.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
