@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using DSI_PPAI.Entidades;
 using DSI_PPAI.Boundary;
-using DSI_PPAI.DTO;
 using DSI_PPAI.Boundary.InterfacesNotificacion;
 
 namespace DSI_PPAI.Control
@@ -70,7 +69,7 @@ namespace DSI_PPAI.Control
             }
 
         }
-
+        /* Este metodo buscará todos los RT activos */
         public void buscarTodosRTActivos()
         {
             this.recursosActivos = new List<RecursoTecnologico>();
@@ -131,8 +130,11 @@ namespace DSI_PPAI.Control
 
         public void tomarSeleccionRT(Dictionary<string, string> recursoSeleccionado)
         {
+            // guardo el recurso que se selecciono 
             this.datosAMostrarRecursoTecnologicoSeleccionado = recursoSeleccionado;
             this.recursoSeleccionado = recursosActivos.FirstOrDefault(rec => recursoSeleccionado.ContainsValue(rec.NumeroRT.ToString()));
+
+
             this.validarCICientificoRT();
         }
 
@@ -153,6 +155,8 @@ namespace DSI_PPAI.Control
             else
             {
                 // si no pertenece obtenemos los turnos desde el plazo de antelacion definido en el centro de investigacion al que pertenece el recurso
+
+                this.obtenerFechaMinimaTurnosPlazo(this.recursoSeleccionado.obtenerPlazoMinimoReservaCI());
                 this.obtenerTurnosDesdePlazo();
             }
 
@@ -161,27 +165,6 @@ namespace DSI_PPAI.Control
         public void obtenerFechaHoraActual()
         {
             this.fechaHoraActual = DateTime.Now;
-        }
-
-        // obtenemos los turnos desde el plazo de antelacion definido en el centro de investigacion al que pertenece el recurso
-        public void obtenerTurnosDesdePlazo()
-        {
-            this.turnosDeRecurso = this.obtenerTurnos(this.recursoSeleccionado);
-            this.obtenerFechaMinimaTurnosPlazo(this.recursoSeleccionado.obtenerPlazoMinimoReservaCI());
-            this.turnosDeRecursoSeleccionado = this.recursoSeleccionado.getTurnosRTDesdePlazo(this.fechaHoraPlazoMinimo);
-
-            if (this.turnosDeRecursoSeleccionado.Count > 0)
-            {
-                this.pantallaRegistrarTurnoRT.mostrarTurnosDisponibles(this.turnosDeRecursoSeleccionado);
-            } else
-            {
-                this.pantallaRegistrarTurnoRT.mostrarErrorSinTurnos();
-            }
-        }
-
-        public void obtenerFechaMinimaTurnosPlazo(int plazo)
-        {
-            this.fechaHoraPlazoMinimo = DateTime.Now.AddDays(plazo);
         }
 
         /* obtendremos los turnos para el recurso seleccionado
@@ -207,9 +190,25 @@ namespace DSI_PPAI.Control
             }
         }
 
-        private List<Dictionary<string, string>> ordenarTurnosPorFechaHoraInicio(List<Dictionary<string, string>> data)
+        public void obtenerFechaMinimaTurnosPlazo(int plazo)
         {
-            return data.OrderBy(dict => dict["Fecha y Hora Inicio"]).ToList<Dictionary<string, string>>();
+            this.fechaHoraPlazoMinimo = DateTime.Now.AddDays(plazo);
+        }
+
+        // obtenemos los turnos desde el plazo de antelacion definido en el centro de investigacion al que pertenece el recurso
+        public void obtenerTurnosDesdePlazo()
+        {
+            this.turnosDeRecurso = this.obtenerTurnos(this.recursoSeleccionado);
+            this.turnosDeRecursoSeleccionado = this.recursoSeleccionado.getTurnosRTDesdePlazo(this.fechaHoraPlazoMinimo);
+
+            if (this.turnosDeRecursoSeleccionado.Count > 0)
+            {
+                this.pantallaRegistrarTurnoRT.mostrarTurnosDisponibles(this.turnosDeRecursoSeleccionado);
+            }
+            else
+            {
+                this.pantallaRegistrarTurnoRT.mostrarErrorSinTurnos();
+            }
         }
 
         // tomamos el turno seleccionado y generamos el resumen de la reserva
@@ -280,6 +279,14 @@ namespace DSI_PPAI.Control
             pantallaRegistrarTurnoRT.mostrarMensaje("La reserva se realizó con éxito");
             pantallaRegistrarTurnoRT.ocultarPantalla();
         }
+
+        #region metodos de soporte
+        private List<Dictionary<string, string>> ordenarTurnosPorFechaHoraInicio(List<Dictionary<string, string>> data)
+        {
+            return data.OrderBy(dict => dict["Fecha y Hora Inicio"]).ToList<Dictionary<string, string>>();
+        }
+
+        #endregion
 
         #region "consultas" a la base ---> generamos los objetos simulando consultas
 
@@ -490,5 +497,6 @@ namespace DSI_PPAI.Control
         }
 
         #endregion
+
     }
 }

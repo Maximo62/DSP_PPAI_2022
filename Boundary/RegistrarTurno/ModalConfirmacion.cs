@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using DSI_PPAI.DTO;
 
 namespace DSI_PPAI.Boundary.RegistrarTurno
 {

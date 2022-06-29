@@ -8,8 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DSI_PPAI.Control;
-using DSI_PPAI.DTO;
-using DSI_PPAI.Entidades;
 using DSI_PPAI.Boundary.RegistrarTurno;
 
 
