@@ -22,15 +22,15 @@ namespace DSI_PPAI.Control
         PersonalCientifico cientificoLogueado { get; set; }
         DateTime fechaHoraActual { get; set; }
         List<Turno> turnosDeRecurso { get; set; }
-        List<DTOTurno> turnosDeRecursoSeleccionado { get; set; }
+        List<Dictionary<string, string>> turnosDeRecursoSeleccionado { get; set; }
         Turno turnoSeleccionado { get; set; }
-        DTORecursoTecnologico datosAMostrarRecursoTecnologicoSeleccionado { get; set; }
+        Dictionary<string, string> datosAMostrarRecursoTecnologicoSeleccionado { get; set; }
         List<TipoNotificacion> tiposNotificacion { get; set; }
         List<Estado> estados { get; set; }
         Estado estadoReservado { get; set; }
-        DTOConfirmacionReserva datosReserva { get; set; }
+        List<string> datosReserva { get; set; }
         DateTime fechaHoraPlazoMinimo { get; set; }
-        
+
 
 
         public void nuevoTurnoRT(PantallaRegistrarTurnoRT pantallaRegistrarTurnoRT)
@@ -38,7 +38,7 @@ namespace DSI_PPAI.Control
             this.sesionActual = new Sesion(DateTime.Now, new Usuario("123456", "lopez.marcelo", true, new PersonalCientifico(888111, "Marcelo", "Lopez", 20225885, "", "", 0, null)));
             this.pantallaRegistrarTurnoRT = pantallaRegistrarTurnoRT;
             this.buscarTiposRT();
-            
+
         }
 
         public void buscarTiposRT()
@@ -53,22 +53,22 @@ namespace DSI_PPAI.Control
             }
 
             this.pantallaRegistrarTurnoRT.pedirSeleccionTipoRT(vectorTiposRT.ToArray());
-            
+
         }
 
-        
+
 
         public void tomarSeleccionTipoRT(int indice)
         {
             if (!indice.Equals(0))
             {
-                this.tipoRecursoSeleccionado = tipoRecursoTecnologicos[indice];
+                this.tipoRecursoSeleccionado = tipoRecursoTecnologicos[indice - 1];
                 this.buscarRTActivos(tipoRecursoSeleccionado);
             } else
             {
                 this.buscarTodosRTActivos();
             }
-            
+
         }
 
         public void buscarTodosRTActivos()
@@ -97,7 +97,7 @@ namespace DSI_PPAI.Control
             foreach (RecursoTecnologico recurso in recursos)
             {
                 // se le pregunta a cada recurso tecnologico registrado si el tipo seleccionado es su tipo de recurso, si lo es lo agregamos a la lista de recursos activos
-                if(recurso.esTuTipoRT(tipoRecurso.Nombre))
+                if (recurso.esTuTipoRT(tipoRecurso.Nombre))
                 {
                     if (recurso.sosRTActivo())
                     {
@@ -106,7 +106,7 @@ namespace DSI_PPAI.Control
                 }
             }
             this.buscarDatosRTActivos();
-             
+
         }
 
         /* Aqui buscaremos para cada recurso activo sus datos*/
@@ -129,10 +129,10 @@ namespace DSI_PPAI.Control
 
         }
 
-        public void tomarSeleccionRT(DTORecursoTecnologico recursoSeleccionado)
+        public void tomarSeleccionRT(Dictionary<string, string> recursoSeleccionado)
         {
             this.datosAMostrarRecursoTecnologicoSeleccionado = recursoSeleccionado;
-            this.recursoSeleccionado = recursosActivos.FirstOrDefault(rec => rec.NumeroRT.Equals(recursoSeleccionado.NumeroRT));
+            this.recursoSeleccionado = recursosActivos.FirstOrDefault(rec => recursoSeleccionado.ContainsValue(rec.NumeroRT.ToString()));
             this.validarCICientificoRT();
         }
 
@@ -142,25 +142,25 @@ namespace DSI_PPAI.Control
         {
             //obtenemos el cientifico logueado a partir de la sesion actual
             this.cientificoLogueado = this.sesionActual.obtenerUsuarioLogueado();
-            
+
             // consultamos si el cientifico logueado pertenece al CENTRO DE INVESTIGACION del RECURSO
             if (this.recursoSeleccionado.esCientificoDeCI(this.cientificoLogueado))
             {
                 // si pertenece buscamos turnos desde la fecha actual
                 this.obtenerFechaHoraActual();
+                this.obtenerTurnosRT();
             }
             else
             {
                 // si no pertenece obtenemos los turnos desde el plazo de antelacion definido en el centro de investigacion al que pertenece el recurso
                 this.obtenerTurnosDesdePlazo();
             }
-            
+
         }
 
         public void obtenerFechaHoraActual()
         {
             this.fechaHoraActual = DateTime.Now;
-            this.obtenerTurnosRT();
         }
 
         // obtenemos los turnos desde el plazo de antelacion definido en el centro de investigacion al que pertenece el recurso
@@ -186,14 +186,14 @@ namespace DSI_PPAI.Control
 
         /* obtendremos los turnos para el recurso seleccionado
          * SOLO SI EL CIENTIFICO PERTENECE AL CENTRO DE INVESTIGACION
-           obtiene turnos desde el dia de la fecha*/ 
+           obtiene turnos desde el dia de la fecha*/
         public void obtenerTurnosRT()
         {
             this.turnosDeRecurso = this.obtenerTurnos(this.recursoSeleccionado);
             this.turnosDeRecursoSeleccionado = this.recursoSeleccionado.getTurnosRT(this.fechaHoraActual);
 
             // Ordenamos los turnos segun su fechaHoraInicio
-            this.turnosDeRecursoSeleccionado.Sort((p, q) => p.FechaHoraInicio.CompareTo(q.FechaHoraInicio));
+            this.turnosDeRecursoSeleccionado = this.ordenarTurnosPorFechaHoraInicio(this.turnosDeRecursoSeleccionado);
 
 
 
@@ -207,22 +207,27 @@ namespace DSI_PPAI.Control
             }
         }
 
-        // tomamos el turno seleccionado y generamos el resumen de la reserva
-        public void tomarSeleccionTurno(DTOTurno turnoSeleccionado)
+        private List<Dictionary<string, string>> ordenarTurnosPorFechaHoraInicio(List<Dictionary<string, string>> data)
         {
-            this.turnoSeleccionado = this.turnosDeRecurso.FirstOrDefault(turno => turno.NroTurno.Equals(turnoSeleccionado.NroTurno));
+            return data.OrderBy(dict => dict["Fecha y Hora Inicio"]).ToList<Dictionary<string, string>>();
+        }
 
-            DTOConfirmacionReserva datosConfirmacion = new DTOConfirmacionReserva();
-            datosConfirmacion.NumeroRT = datosAMostrarRecursoTecnologicoSeleccionado.NumeroRT.ToString();
-            datosConfirmacion.NombreTipo = recursoSeleccionado.getNombreTipoRT();
-            datosConfirmacion.NombreCI = datosAMostrarRecursoTecnologicoSeleccionado.NombreCentroDeInvestigacion;
-            datosConfirmacion.ModeloYMarca = datosAMostrarRecursoTecnologicoSeleccionado.ModeloYMarca;
-            datosConfirmacion.FechaHoraInicio = turnoSeleccionado.FechaHoraInicio;
-            datosConfirmacion.FechaHoraFin = turnoSeleccionado.FechaHoraFin;
-            datosConfirmacion.DiaSemana = turnoSeleccionado.DiaSemana;
-            datosConfirmacion.NombreYApellido = cientificoLogueado.Apellido + ", " + cientificoLogueado.Nombre;
-            datosConfirmacion.Legajo = cientificoLogueado.Legajo.ToString();
-            this.datosReserva = datosConfirmacion; //guardamos los datos de la reserva
+        // tomamos el turno seleccionado y generamos el resumen de la reserva
+        public void tomarSeleccionTurno(Dictionary<string, string> turnoSeleccionado)
+        {
+            this.turnoSeleccionado = this.turnosDeRecurso.FirstOrDefault(turno => turnoSeleccionado.ContainsValue(turno.NroTurno.ToString()));
+
+            List<string> datosConfirmacion = new List<string>();
+            datosConfirmacion.Add(datosAMostrarRecursoTecnologicoSeleccionado.GetValueOrDefault("Numero de Recurso", ""));
+            datosConfirmacion.Add(recursoSeleccionado.getNombreTipoRT());
+            datosConfirmacion.Add(datosAMostrarRecursoTecnologicoSeleccionado.GetValueOrDefault("Modelo y Marca", ""));
+            datosConfirmacion.Add(datosAMostrarRecursoTecnologicoSeleccionado.GetValueOrDefault("Centro de Investigacion", ""));
+            datosConfirmacion.Add(turnoSeleccionado.GetValueOrDefault("Dia Semana", ""));
+            datosConfirmacion.Add(turnoSeleccionado.GetValueOrDefault("Fecha y Hora Inicio", ""));
+            datosConfirmacion.Add(turnoSeleccionado.GetValueOrDefault("Fecha y Hora Fin", ""));
+            datosConfirmacion.Add(cientificoLogueado.Apellido + ", " + cientificoLogueado.Nombre);
+            datosConfirmacion.Add(cientificoLogueado.Legajo.ToString());
+            this.datosReserva = datosConfirmacion;
 
             List<string> listaTipos = new List<string>();
             this.tiposNotificacion = obtenerTiposNotificacion();
@@ -232,7 +237,7 @@ namespace DSI_PPAI.Control
             pantallaRegistrarTurnoRT.solicitarConfirmacionReserva(datosConfirmacion, listaTipos);
         }
 
-        public void tomarConfirmacionReserva(DTOConfirmacionReserva datosConfirmacion, int indiceTipoNotificacion)
+        public void tomarConfirmacionReserva(int indiceTipoNotificacion)
         {
             TipoNotificacion tipoNotificacionSeleccionado = this.tiposNotificacion[indiceTipoNotificacion];
             this.reservarTurno();
@@ -459,7 +464,7 @@ namespace DSI_PPAI.Control
                 recurso6.CentroDeInvestigacion.Cientificos = cientificos6;
             
             var recurso7 = new RecursoTecnologico(
-                6,
+                7,
                 DateTime.Parse("21/01/2022 15:22 PM"),
                 new object(),
                 2,

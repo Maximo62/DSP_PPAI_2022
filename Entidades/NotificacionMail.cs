@@ -10,7 +10,7 @@ namespace DSI_PPAI.Entidades
 {
     public class NotificacionMail : INotificacion
     {
-        public bool enviarNotificacion(DTOConfirmacionReserva datosReserva)
+        public bool enviarNotificacion(List<string> datosReserva)
         {
             return true;
         }

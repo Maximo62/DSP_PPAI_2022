@@ -13,26 +13,25 @@ namespace DSI_PPAI.Boundary.RegistrarTurno
 {
     public partial class ModalConfirmacion : Form
     {
-        private PantallaRegistrarTurnoRT pantallaRegistrarTurno { get; set; }
-        private DTOConfirmacionReserva datosReserva { get; set; }   
+        private PantallaRegistrarTurnoRT pantallaRegistrarTurno { get; set; } 
 
         public ModalConfirmacion()
         {
             InitializeComponent();
         }
-        public void habilitarVentana(DTOConfirmacionReserva datosConfirmacionReserva, List<string> listaTipos, PantallaRegistrarTurnoRT pantallaRegistrarTurnoRT)
+        public void habilitarVentana(List<string> datosConfirmacionReserva, List<string> listaTipos, PantallaRegistrarTurnoRT pantallaRegistrarTurnoRT)
         {
             this.pantallaRegistrarTurno = pantallaRegistrarTurnoRT;
 
-            lblRecursoNumero.Text = datosConfirmacionReserva.NumeroRT;
-            lblRecursoTipo.Text = datosConfirmacionReserva.NombreTipo;
-            lblRecursoModeloMarca.Text = datosConfirmacionReserva.ModeloYMarca;
-            lblRecursoCI.Text = datosConfirmacionReserva.NombreCI;
-            lblDiaFecha.Text = datosConfirmacionReserva.DiaSemana + " - " + datosConfirmacionReserva.FechaHoraInicio.Date.ToShortDateString();
-            lblHoraInicio.Text = datosConfirmacionReserva.FechaHoraInicio.TimeOfDay.ToString();
-            lblHoraFin.Text = datosConfirmacionReserva.FechaHoraFin.TimeOfDay.ToString();
-            lblNombreCientifico.Text = datosConfirmacionReserva.NombreYApellido;
-            lblLegajoCientifico.Text = datosConfirmacionReserva.Legajo;
+            lblRecursoNumero.Text = datosConfirmacionReserva[0];
+            lblRecursoTipo.Text = datosConfirmacionReserva[1];
+            lblRecursoModeloMarca.Text = datosConfirmacionReserva[2];
+            lblRecursoCI.Text = datosConfirmacionReserva[3];
+            lblDiaFecha.Text = datosConfirmacionReserva[4] + " - " + DateTime.Parse(datosConfirmacionReserva[5]).Date.ToShortDateString();
+            lblHoraInicio.Text = DateTime.Parse(datosConfirmacionReserva[5]).TimeOfDay.ToString();
+            lblHoraFin.Text = DateTime.Parse(datosConfirmacionReserva[6]).TimeOfDay.ToString();
+            lblNombreCientifico.Text = datosConfirmacionReserva[7];
+            lblLegajoCientifico.Text = datosConfirmacionReserva[8];
 
             cboTiposNotificacion.Items.AddRange(listaTipos.ToArray());
             cboTiposNotificacion.SelectedIndex = 0;
@@ -45,7 +44,7 @@ namespace DSI_PPAI.Boundary.RegistrarTurno
         private void tomarConfirmacionReserva(object sender, EventArgs e)
         {
             int indiceTipoSeleccionado = cboTiposNotificacion.SelectedIndex;
-            this.pantallaRegistrarTurno.tomarConfirmacionreserva(this.datosReserva, indiceTipoSeleccionado);
+            this.pantallaRegistrarTurno.tomarConfirmacionreserva(indiceTipoSeleccionado);
             this.Dispose();
         }
 

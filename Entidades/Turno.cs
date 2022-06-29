@@ -46,18 +46,18 @@ namespace DSI_PPAI.Entidades
             return fechaHoraPlazo <= fechaHoraInicio;
         }
 
-        public DTOTurno getDatos()
+        public Dictionary<string, string> getDatos()
         {
-            DTOTurno turno = new DTOTurno();
-            turno.NroTurno = NroTurno;
-            turno.FechaHoraInicio = this.fechaHoraInicio;
-            turno.FechaHoraFin = this.fechaHoraFin;
-            turno.DiaSemana = this.DiaSemana;
-            foreach (CambioEstadoTurno cambioEstadoTurno in this.cambiosEstadoTurnos)
+            Dictionary<string, string> turno = new Dictionary<string, string>();
+            turno.Add("Numero Turno", this.NroTurno.ToString());
+            turno.Add("Fecha y Hora Inicio", this.FechaHoraInicio.ToString());
+            turno.Add("Fecha y Hora Fin", this.FechaHoraFin.ToString());
+            turno.Add("Dia Semana", this.DiaSemana);
+            foreach (CambioEstadoTurno cambioEstadoTurno in this.CambioEstadoTurno)
             {
                 if (cambioEstadoTurno.esEstadoActual())
                 {
-                    turno.NombreEstadoActual = cambioEstadoTurno.getEstado();
+                    turno.Add("Estado", cambioEstadoTurno.getEstado());
                 }
             }
 

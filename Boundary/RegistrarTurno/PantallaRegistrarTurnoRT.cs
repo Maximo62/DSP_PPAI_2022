@@ -60,11 +60,8 @@ namespace DSI_PPAI.Boundary
         {
             DataTable table = ToDataTable(recursosActivos);
             dgvRecursos.DataSource = table;
-
-
-            dgvRecursos.Refresh();
-
             dgvRecursos.ClearSelection();
+            dgvRecursos.Invalidate();
 
             if (dgvRecursos.Rows.Count.Equals(0))
             {
@@ -96,25 +93,23 @@ namespace DSI_PPAI.Boundary
 
         public void tomarSeleccionRT(object sender, EventArgs e)
         {
-            DTORecursoTecnologico recursoSeleccionado = new DTORecursoTecnologico();
             if (dgvRecursos.CurrentRow != null)
             {
-                recursoSeleccionado = (DTORecursoTecnologico)dgvRecursos.CurrentRow.DataBoundItem;
+                Dictionary<string, string> recursoSeleccionado = new Dictionary<string, string>();
+                for (int i = 0; i < dgvRecursos.Columns.Count; i++)
+                {
+                    recursoSeleccionado.Add(dgvRecursos.Columns[i].Name, dgvRecursos.CurrentRow.Cells[i].Value.ToString());
+                }
                 gestorReservaTurnoRT.tomarSeleccionRT(recursoSeleccionado);
             }
         }
 
-        public void mostrarTurnosDisponibles(List<DTOTurno> turnos)
+        public void mostrarTurnosDisponibles(List<Dictionary<string, string>> turnos)
         {
-            dgvTurnos.DataSource = turnos;
-            dgvTurnos.Columns["fechaHoraInicio"].DisplayIndex = 0;
-            dgvTurnos.Columns["fechaHoraInicio"].HeaderText = "Fecha y Hora Inicio";
-            dgvTurnos.Columns["fechaHoraFin"].DisplayIndex = 1;
-            dgvTurnos.Columns["fechaHoraFin"].HeaderText = "Fecha y Hora Fin";
-            dgvTurnos.Columns["nombreEstadoActual"].DisplayIndex = 2;
-            dgvTurnos.Columns["nombreEstadoActual"].HeaderText = "Estado Actual";
-            dgvTurnos.Columns["diaSemana"].Visible = false;
+            DataTable table = ToDataTable(turnos);
+            dgvTurnos.DataSource = table;
             dgvTurnos.ClearSelection();
+            dgvTurnos.Invalidate();
 
             if (dgvTurnos.Rows.Count.Equals(0))
             {
@@ -124,23 +119,26 @@ namespace DSI_PPAI.Boundary
 
         private void tomarSeleccionTurno(object sender, EventArgs e)
         {
-            DTOTurno turnoSeleccionado = new DTOTurno();
             if (dgvTurnos.CurrentRow != null)
             {
-                turnoSeleccionado = (DTOTurno)dgvTurnos.CurrentRow.DataBoundItem;
+                Dictionary<string, string> turnoSeleccionado = new Dictionary<string, string>();
+                for (int i = 0; i < dgvTurnos.Columns.Count; i++)
+                {
+                    turnoSeleccionado.Add(dgvTurnos.Columns[i].Name, dgvTurnos.CurrentRow.Cells[i].Value.ToString());
+                }
                 gestorReservaTurnoRT.tomarSeleccionTurno(turnoSeleccionado);
             }
         }
 
-        public void solicitarConfirmacionReserva(DTOConfirmacionReserva datosConfirmacionReserva, List<string> tiposNotificacion)
+        public void solicitarConfirmacionReserva(List<string> datosConfirmacionReserva, List<string> tiposNotificacion)
         {
             ModalConfirmacion modalConfirmacion = new ModalConfirmacion();
             modalConfirmacion.habilitarVentana(datosConfirmacionReserva, tiposNotificacion, this);
         }
 
-        public void tomarConfirmacionreserva(DTOConfirmacionReserva datosConfirmacion, int indiceTipoNotificacion)
+        public void tomarConfirmacionreserva(int indiceTipoNotificacion)
         {
-            gestorReservaTurnoRT.tomarConfirmacionReserva(datosConfirmacion, indiceTipoNotificacion);
+            gestorReservaTurnoRT.tomarConfirmacionReserva(indiceTipoNotificacion);
         }
 
 
@@ -173,7 +171,7 @@ namespace DSI_PPAI.Boundary
             {
                 return;
             }
-            if (e.ColumnIndex == 1)
+            if (e.ColumnIndex == 0)
             {
                 if (IsRepeatedCellValue(e.RowIndex, e.ColumnIndex))
                 {
@@ -188,7 +186,7 @@ namespace DSI_PPAI.Boundary
             DataGridViewCell currCell = dgvRecursos.Rows[rowIndex].Cells[colIndex]; /*Rows[rowIndex].Cells[colIndex];*/
             DataGridViewCell prevCell = dgvRecursos.Rows[rowIndex - 1].Cells[colIndex]; /*Rows[rowIndex - 1].Cells[colIndex];*/
 
-            if (currCell.ColumnIndex == 1)
+            if (currCell.ColumnIndex == 0)
             {
                 if ((currCell.Value == prevCell.Value) ||
                                (currCell.Value != null && prevCell.Value != null &&
@@ -231,12 +229,16 @@ namespace DSI_PPAI.Boundary
 
         private void habilitarSeleccionTurno(object sender, DataGridViewCellEventArgs e)
         {
-            if (dgvTurnos.CurrentRow.Cells[2].Value.Equals("Disponible"))
+            if (dgvTurnos.SelectedRows.Count != 0)
             {
-                btnSelTurno.Enabled = true;
-            } else
-            {
-                btnSelTurno.Enabled = false;
+                if (dgvTurnos.CurrentRow.Cells[4].Value.Equals("Disponible"))
+                {
+                    btnSelTurno.Enabled = true;
+                } else
+                {
+                    btnSelTurno.Enabled = false;
+                }
+
             }
         }
 
@@ -261,17 +263,20 @@ namespace DSI_PPAI.Boundary
 
         private void dgvTurnos_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            foreach (DataGridViewRow myRow in dgvTurnos.Rows)
+            if(dgvTurnos.Rows != null && dgvTurnos.Rows.Count > 0 )
             {
-                if (myRow.Cells[2].Value.Equals("Disponible"))
+                foreach (DataGridViewRow myRow in dgvTurnos.Rows)
                 {
-                    myRow.DefaultCellStyle.BackColor = Color.LightSkyBlue;
-                } else if (myRow.Cells[2].Value.Equals("Pendiente de Confirmacion"))
-                {
-                    myRow.DefaultCellStyle.BackColor = Color.LightSteelBlue;
-                } else
-                {
-                    myRow.DefaultCellStyle.BackColor = Color.IndianRed;
+                    if (myRow.Cells[4].Value != null && myRow.Cells[4].Value.Equals("Disponible"))
+                    {
+                        myRow.DefaultCellStyle.BackColor = Color.LightSkyBlue;
+                    } else if (myRow.Cells[4].Value != null && myRow.Cells[4].Value.Equals("Pendiente de Confirmacion"))
+                    {
+                        myRow.DefaultCellStyle.BackColor = Color.LightSteelBlue;
+                    } else
+                    {
+                        myRow.DefaultCellStyle.BackColor = Color.IndianRed;
+                    }
                 }
             }
         }

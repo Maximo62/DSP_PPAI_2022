@@ -113,30 +113,30 @@ namespace DSI_PPAI.Entidades {
             return this.centroDeInvestigacion.esCientificoDeCI(cientificoLogueado);
         }
 
-        public List<DTOTurno> getTurnosRT(DateTime fechaActual)
+        public List<Dictionary<string, string>> getTurnosRT(DateTime fechaActual)
         {
-            List<DTOTurno> turnos = new List<DTOTurno>();
+            List<Dictionary<string, string>> turnosRT = new List<Dictionary<string, string>>();
             foreach (Turno turno in this.turnos)
             {
                 if (turno.esPosteriorFechaActual(fechaActual))
                 {
-                    turnos.Add(turno.getDatos());
+                    turnosRT.Add(turno.getDatos());
                 }
             }
-            return turnos;
+            return turnosRT;
         }
 
-        public List<DTOTurno> getTurnosRTDesdePlazo(DateTime fechaHoraPlazo)
+        public List<Dictionary<string, string>> getTurnosRTDesdePlazo(DateTime fechaHoraPlazo)
         {
-            List<DTOTurno> turnos = new List<DTOTurno>();
+            List<Dictionary<string, string>> turnosRT = new List<Dictionary<string, string>>();
             foreach (Turno turno in this.turnos)
             {
                 if (turno.esPosteriorPlazoDefinido(fechaHoraPlazo))
                 {
-                    turnos.Add(turno.getDatos());
+                    turnosRT.Add(turno.getDatos());
                 }
             }
-            return turnos;
+            return turnosRT;
         }
 
         public string getNombreTipoRT()

@@ -9,6 +9,6 @@ namespace DSI_PPAI.Boundary.InterfacesNotificacion
 {
     public interface INotificacion
     {
-        public bool enviarNotificacion(DTOConfirmacionReserva datosReserva);
+        public bool enviarNotificacion(List<string> datosReserva);
     }
 }

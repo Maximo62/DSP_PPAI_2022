@@ -65,11 +65,14 @@
             // 
             // dgvRecursos
             // 
+            this.dgvRecursos.AllowUserToAddRows = false;
+            this.dgvRecursos.AllowUserToDeleteRows = false;
             this.dgvRecursos.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvRecursos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvRecursos.Location = new System.Drawing.Point(14, 20);
             this.dgvRecursos.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dgvRecursos.Name = "dgvRecursos";
+            this.dgvRecursos.ReadOnly = true;
             this.dgvRecursos.RowHeadersWidth = 51;
             this.dgvRecursos.RowTemplate.Height = 29;
             this.dgvRecursos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -142,11 +145,14 @@
             // 
             // dgvTurnos
             // 
+            this.dgvTurnos.AllowUserToAddRows = false;
+            this.dgvTurnos.AllowUserToDeleteRows = false;
             this.dgvTurnos.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvTurnos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvTurnos.Location = new System.Drawing.Point(14, 20);
             this.dgvTurnos.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dgvTurnos.Name = "dgvTurnos";
+            this.dgvTurnos.ReadOnly = true;
             this.dgvTurnos.RowHeadersWidth = 51;
             this.dgvTurnos.RowTemplate.Height = 29;
             this.dgvTurnos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
