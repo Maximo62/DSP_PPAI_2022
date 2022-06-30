@@ -18,69 +18,10 @@
         private int tiempoAntelacionReserva;
         private DateTime? fechaBaja = null;
         private string motivoBaja;
-        private RecursoTecnologico[] recursoTecnologicos;
+        private List<RecursoTecnologico> recursoTecnologicos;
         private List<AsignacionCientificoDelCI> cientificos;
 
-        // Constructor sin RT ni Asignacion
-        public CentroDeInvestigacion(string nombre, string sigla, string direccion, string edificio, int piso, string coordenadas, string telefonosContacto, string correoElectronico, int numeroResolucionCreacion, DateTime fechaResolucionCreacion, string reglamento, string caracteristicasGenerales, DateTime fechaAlta, int tiempoAntelacionReserva, string motivoBaja)
-        {
-            this.nombre = nombre;
-            this.sigla = sigla;
-            this.direccion = direccion;
-            this.edificio = edificio;
-            this.piso = piso;
-            this.coordenadas = coordenadas;
-            this.telefonosContacto = telefonosContacto;
-            this.correoElectronico = correoElectronico;
-            this.numeroResolucionCreacion = numeroResolucionCreacion;
-            this.fechaResolucionCreacion = fechaResolucionCreacion;
-            this.reglamento = reglamento;
-            this.caracteristicasGenerales = caracteristicasGenerales;
-            this.fechaAlta = fechaAlta;
-            this.tiempoAntelacionReserva = tiempoAntelacionReserva;
-            this.motivoBaja = motivoBaja;
-        }
-
-        // Constructor sin RT
-        public CentroDeInvestigacion(string nombre, string sigla, string direccion, string edificio, int piso, string coordenadas, string telefonosContacto, string correoElectronico, int numeroResolucionCreacion, DateTime fechaResolucionCreacion, string reglamento, string caracteristicasGenerales, DateTime fechaAlta, int tiempoAntelacionReserva, string motivoBaja, List<AsignacionCientificoDelCI> cientificos)
-        {
-            this.nombre = nombre;
-            this.sigla = sigla;
-            this.direccion = direccion;
-            this.edificio = edificio;
-            this.piso = piso;
-            this.coordenadas = coordenadas;
-            this.telefonosContacto = telefonosContacto;
-            this.correoElectronico = correoElectronico;
-            this.numeroResolucionCreacion = numeroResolucionCreacion;
-            this.fechaResolucionCreacion = fechaResolucionCreacion;
-            this.reglamento = reglamento;
-            this.caracteristicasGenerales = caracteristicasGenerales;
-            this.fechaAlta = fechaAlta;
-            this.tiempoAntelacionReserva = tiempoAntelacionReserva;
-            this.motivoBaja = motivoBaja;
-            this.cientificos = cientificos;
-        }
-        // Constructor sin AsignacionCientificoDelCI
-        public CentroDeInvestigacion(string nombre, string sigla, string direccion, string edificio, int piso, string coordenadas, string telefonosContacto, string correoElectronico, int numeroResolucionCreacion, DateTime fechaResolucionCreacion, string reglamento, string caracteristicasGenerales, DateTime fechaAlta, int tiempoAntelacionReserva, string motivoBaja, RecursoTecnologico[] recursoTecnologicos)
-        {
-            this.nombre = nombre;
-            this.sigla = sigla;
-            this.direccion = direccion;
-            this.edificio = edificio;
-            this.piso = piso;
-            this.coordenadas = coordenadas;
-            this.telefonosContacto = telefonosContacto;
-            this.correoElectronico = correoElectronico;
-            this.numeroResolucionCreacion = numeroResolucionCreacion;
-            this.fechaResolucionCreacion = fechaResolucionCreacion;
-            this.reglamento = reglamento;
-            this.caracteristicasGenerales = caracteristicasGenerales;
-            this.fechaAlta = fechaAlta;
-            this.tiempoAntelacionReserva = tiempoAntelacionReserva;
-            this.motivoBaja = motivoBaja;
-            this.recursoTecnologicos = recursoTecnologicos;
-        }
+        
         // Constructor completo
         public CentroDeInvestigacion(
             string nombre,
@@ -97,9 +38,7 @@
             string caracteristicasGenerales,
             DateTime fechaAlta,
             int tiempoAntelacionReserva,
-            DateTime fechaBaja,
-            string motivoBaja,
-            RecursoTecnologico[] recursoTecnologicos,
+            List<RecursoTecnologico> recursoTecnologicos,
             List<AsignacionCientificoDelCI> cientificos)
         {
             this.Nombre = nombre;
@@ -116,8 +55,6 @@
             this.CaracteristicasGenerales = caracteristicasGenerales;
             this.FechaAlta = fechaAlta;
             this.TiempoAntelacionReserva = tiempoAntelacionReserva;
-            this.FechaBaja = fechaBaja;
-            this.MotivoBaja = motivoBaja;
             this.RecursoTecnologicos = recursoTecnologicos;
             this.Cientificos = cientificos;
         }
@@ -138,7 +75,7 @@
         public int TiempoAntelacionReserva { get => tiempoAntelacionReserva; set => tiempoAntelacionReserva = value; }
         public DateTime FechaBaja { get => (DateTime)fechaBaja; set => fechaBaja = value; }
         public string MotivoBaja { get => motivoBaja; set => motivoBaja = value; }
-        public RecursoTecnologico[] RecursoTecnologicos { get => recursoTecnologicos; set => recursoTecnologicos = value; }
+        public List<RecursoTecnologico> RecursoTecnologicos { get => recursoTecnologicos; set => recursoTecnologicos = value; }
         public List<AsignacionCientificoDelCI> Cientificos { get => cientificos; set => cientificos = value; }
 
         public bool esCientificoDeCI(PersonalCientifico cientificoLogueado)
@@ -146,6 +83,18 @@
             foreach (AsignacionCientificoDelCI cientifico in this.cientificos)
             {
                 return cientifico.esTuCientifico(cientificoLogueado);
+            }
+            return false;
+        }
+
+        public bool esTuRecurso(RecursoTecnologico recurso)
+        {
+            foreach (RecursoTecnologico rec in RecursoTecnologicos)
+            {
+                if (rec.NumeroRT.Equals(recurso.NumeroRT))
+                {
+                    return true;
+                }
             }
             return false;
         }

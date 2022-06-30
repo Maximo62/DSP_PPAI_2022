@@ -21,7 +21,6 @@ namespace DSI_PPAI.Entidades {
 		private TipoRecursoTecnologico tipoRecursoTecnologico;
 		private Modelo modelo;
 		private List<Turno> turnos;
-        private CentroDeInvestigacion centroDeInvestigacion;
 
         //Constructur sin turnos
         public RecursoTecnologico(int numeroRT, DateTime fechaAlta, object imagen, int periodicidadMantenimientoPrev, int duracionMantenimientoPrev, int fraccionHorarioTurnos, CambioEstadoRT[] cambiosEstadoRT, TipoRecursoTecnologico tipoRecursoTecnologico, Modelo modelo)
@@ -61,7 +60,6 @@ namespace DSI_PPAI.Entidades {
         public CambioEstadoRT[] CambiosEstadoRT { get => cambiosEstadoRT; set => cambiosEstadoRT = value; }
         public TipoRecursoTecnologico TipoRecursoTecnologico { get => tipoRecursoTecnologico; set => tipoRecursoTecnologico = value; }
         public Modelo Modelo { get => modelo; set => modelo = value; }
-        public CentroDeInvestigacion CentroDeInvestigacion { get => centroDeInvestigacion; set => centroDeInvestigacion = value; }
 
 
         // verificamos si el tipo de recurso seleccionado es el tipo del recurso que se esta comprobando actualmente
@@ -85,9 +83,16 @@ namespace DSI_PPAI.Entidades {
             return false;
         }
 
-        public string getCentroDeInvestigacion()
+        public string? getCentroDeInvestigacion(List<CentroDeInvestigacion> centros)
         {
-            return this.centroDeInvestigacion.Nombre;
+            foreach (CentroDeInvestigacion centro in centros)
+            {
+                if (centro.esTuRecurso(this))
+                {
+                    return centro.Nombre;
+                }
+            }
+            return null;
         }
 
         public string getEstadoActual()
@@ -107,9 +112,9 @@ namespace DSI_PPAI.Entidades {
             return this.modelo.getModeloYMarca();
         }
 
-        public bool esCientificoDeCI(PersonalCientifico cientificoLogueado)
+        public bool esCientificoDeCI(CentroDeInvestigacion centro, PersonalCientifico cientificoLogueado)
         {
-            return this.centroDeInvestigacion.esCientificoDeCI(cientificoLogueado);
+            return centro.esCientificoDeCI(cientificoLogueado);
         }
 
         public List<Dictionary<string, string>> getTurnosRT(DateTime fechaActual)
@@ -143,9 +148,9 @@ namespace DSI_PPAI.Entidades {
             return this.tipoRecursoTecnologico.Nombre;
         }
 
-        public int obtenerPlazoMinimoReservaCI()
+        public int obtenerPlazoMinimoReservaCI(CentroDeInvestigacion centro)
         {
-            return this.centroDeInvestigacion.TiempoAntelacionReserva;
+            return centro.TiempoAntelacionReserva;
         }
     }
 

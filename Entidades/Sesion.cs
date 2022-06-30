@@ -23,9 +23,9 @@ namespace DSI_PPAI.Entidades
         public Usuario Usuario { get => usuario; set => usuario = value; }
 
         // obtenemos el objeto personalCientifico de la sesion
-        public PersonalCientifico obtenerUsuarioLogueado()
+        public PersonalCientifico obtenerUsuarioLogueado(List<PersonalCientifico> cientificos)
         {
-            return this.usuario.getPersonalCientifico();
+            return this.usuario.getPersonalCientifico(cientificos);
         }
     }
 }

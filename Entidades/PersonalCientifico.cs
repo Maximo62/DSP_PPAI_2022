@@ -15,8 +15,8 @@ namespace DSI_PPAI.Entidades
 		private string correoElectronicoInstitucional;
 		private string correoElectronicoPersonal;
 		private int telefonoCelular;
-		private Usuario? usuario;
-        public PersonalCientifico(int legajo, string nombre, string apellido, int numeroDocumento, string correoElectronicoInstitucional, string correoElectronicoPersonal, int telefonoCelular, Usuario usuario = null)
+		private Usuario usuario;
+        public PersonalCientifico(int legajo, string nombre, string apellido, int numeroDocumento, string correoElectronicoInstitucional, string correoElectronicoPersonal, int telefonoCelular, Usuario usuario)
         {
             this.legajo = legajo;
             this.nombre = nombre;
@@ -36,5 +36,10 @@ namespace DSI_PPAI.Entidades
 		public string CorreoElectronicoPersonal { get => correoElectronicoPersonal; set => correoElectronicoPersonal = value; }
 		public int TelefonoCelular { get => telefonoCelular; set => telefonoCelular = value; }
 		public Usuario Usuario { get => usuario; set => usuario = value; }
+
+		public bool esTuUsuario(Usuario usuarioAComprobar)
+        {
+			return this.usuario.UsuarioNombre.Equals(usuarioAComprobar.UsuarioNombre);
+        }
 	}
-    }
+ }

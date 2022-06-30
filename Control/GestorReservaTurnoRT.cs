@@ -29,12 +29,14 @@ namespace DSI_PPAI.Control
         Estado estadoReservado { get; set; }
         List<string> datosReserva { get; set; }
         DateTime fechaHoraPlazoMinimo { get; set; }
+        List<CentroDeInvestigacion> centrosDeInvestigacion { get; set; }
+        CentroDeInvestigacion centroDeInvestigacionRecursoSeleccionado { get; set; }
 
 
 
         public void nuevoTurnoRT(PantallaRegistrarTurnoRT pantallaRegistrarTurnoRT)
         {
-            this.sesionActual = new Sesion(DateTime.Now, new Usuario("123456", "lopez.marcelo", true, new PersonalCientifico(888111, "Marcelo", "Lopez", 20225885, "", "", 0, null)));
+            this.sesionActual = new Sesion(DateTime.Now, new Usuario("123456", "lopez.marcelo", true));
             this.pantallaRegistrarTurnoRT = pantallaRegistrarTurnoRT;
             this.buscarTiposRT();
 
@@ -112,11 +114,13 @@ namespace DSI_PPAI.Control
         public void buscarDatosRTActivos()
         {
             this.recursosActivosAMostrar = new List<Dictionary<string, string>>();
+            this.centrosDeInvestigacion = this.obtenerCentrosDeInvestigacion();
+
             foreach (RecursoTecnologico recurso in this.recursosActivos)
             {
                 // AQUI EXPLICAR COMO SON LOS METODOS DE ACCESO EN C# MAYUS --> ACCESO, MINUS --> ATRIBUTO
                 Dictionary<string, string> recursoAMostrar = new Dictionary<string, string>();
-                recursoAMostrar.Add("Centro de Investigacion", recurso.getCentroDeInvestigacion());
+                recursoAMostrar.Add("Centro de Investigacion", recurso.getCentroDeInvestigacion(this.centrosDeInvestigacion));
                 recursoAMostrar.Add("Numero de Recurso", recurso.NumeroRT.ToString());
                 recursoAMostrar.Add("Modelo y Marca", recurso.getModeloYMarca());
                 recursoAMostrar.Add("Estado", recurso.getEstadoActual());
@@ -128,12 +132,12 @@ namespace DSI_PPAI.Control
 
         }
 
-        public void tomarSeleccionRT(Dictionary<string, string> recursoSeleccionado)
+        public void tomarSeleccionRT(int indiceRecursoSeleccionado)
         {
             // guardo el recurso que se selecciono 
-            this.datosAMostrarRecursoTecnologicoSeleccionado = recursoSeleccionado;
-            this.recursoSeleccionado = recursosActivos.FirstOrDefault(rec => recursoSeleccionado.ContainsValue(rec.NumeroRT.ToString()));
-
+            this.datosAMostrarRecursoTecnologicoSeleccionado = this.recursosActivosAMostrar[indiceRecursoSeleccionado];
+            this.recursoSeleccionado = recursosActivos.FirstOrDefault(rec => this.datosAMostrarRecursoTecnologicoSeleccionado.ContainsValue(rec.NumeroRT.ToString()));
+            this.centroDeInvestigacionRecursoSeleccionado = this.centrosDeInvestigacion.FirstOrDefault(centro => this.datosAMostrarRecursoTecnologicoSeleccionado.ContainsValue(centro.Nombre));
 
             this.validarCICientificoRT();
         }
@@ -143,10 +147,10 @@ namespace DSI_PPAI.Control
         public void validarCICientificoRT()
         {
             //obtenemos el cientifico logueado a partir de la sesion actual
-            this.cientificoLogueado = this.sesionActual.obtenerUsuarioLogueado();
+            this.cientificoLogueado = this.sesionActual.obtenerUsuarioLogueado(this.obtenerCientificos());
 
             // consultamos si el cientifico logueado pertenece al CENTRO DE INVESTIGACION del RECURSO
-            if (this.recursoSeleccionado.esCientificoDeCI(this.cientificoLogueado))
+            if (this.recursoSeleccionado.esCientificoDeCI(this.centroDeInvestigacionRecursoSeleccionado, this.cientificoLogueado))
             {
                 // si pertenece buscamos turnos desde la fecha actual
                 this.obtenerFechaHoraActual();
@@ -156,7 +160,7 @@ namespace DSI_PPAI.Control
             {
                 // si no pertenece obtenemos los turnos desde el plazo de antelacion definido en el centro de investigacion al que pertenece el recurso
 
-                this.obtenerFechaMinimaTurnosPlazo(this.recursoSeleccionado.obtenerPlazoMinimoReservaCI());
+                this.obtenerFechaMinimaTurnosPlazo(this.recursoSeleccionado.obtenerPlazoMinimoReservaCI(this.centroDeInvestigacionRecursoSeleccionado));
                 this.obtenerTurnosDesdePlazo();
             }
 
@@ -371,6 +375,118 @@ namespace DSI_PPAI.Control
             return turnosDeRecurso;
         }
 
+        public List<CentroDeInvestigacion> obtenerCentrosDeInvestigacion()
+        {
+            var cambiosEstadoRT = new List<CambioEstadoRT>();
+            cambiosEstadoRT.Add(new CambioEstadoRT(DateTime.Parse("15/06/2022"), new Estado("Ingresado", "", "Recurso Tecnologico", true, false)));
+
+            List<CentroDeInvestigacion> centros = new List<CentroDeInvestigacion>();
+
+            #region recursos CI 1
+
+            List<RecursoTecnologico> recursos1 = new List<RecursoTecnologico>();
+            var recurso1 = new RecursoTecnologico(
+                1,
+                DateTime.Parse("20/06/2022 15:22 PM"),
+                new object(),
+                2,
+                1,
+                1,
+                cambiosEstadoRT.ToArray(),
+                new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
+                new Modelo("AmScope M150C-I40X-1000X", "AmScope"));
+
+            var recurso2 = new RecursoTecnologico(
+                2,
+                DateTime.Parse("18/06/2022 15:22 PM"),
+                new object(),
+                3,
+                2,
+                2,
+                cambiosEstadoRT.ToArray(),
+                new TipoRecursoTecnologico("Resonador Magnético alta complejidad", ""),
+                new Modelo("Ingenia Elition 3.0T", "Phillips"));
+
+            var recurso3 = new RecursoTecnologico(
+                3,
+                DateTime.Parse("12/06/2022 15:22 PM"),
+                new object(),
+                3,
+                1,
+                1,
+                cambiosEstadoRT.ToArray(),
+                new TipoRecursoTecnologico("Balanza de precisión analítica", ""),
+                new Modelo("Serie A-300", "Krey"));
+
+            var recurso4 = new RecursoTecnologico(
+                4,
+                DateTime.Parse("15/04/2022 15:20 PM"),
+                new object(),
+                2,
+                1,
+                1,
+                cambiosEstadoRT.ToArray(),
+                new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
+                new Modelo("AmScope M150C-I40X-1000X - E", "AmScope"));
+
+            var recurso5 = new RecursoTecnologico(
+                5,
+                DateTime.Parse("21/01/2022 15:22 PM"),
+                new object(),
+                2,
+                1,
+                1,
+                cambiosEstadoRT.ToArray(),
+                new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
+                new Modelo("Arcano Xsp-104", "Arcano"));
+
+            recursos1.Add(recurso1);
+            recursos1.Add(recurso2);
+            recursos1.Add(recurso3);
+            recursos1.Add(recurso4);
+            recursos1.Add(recurso5);
+            #endregion
+            List<AsignacionCientificoDelCI> cientificos1 = new List<AsignacionCientificoDelCI>();
+            cientificos1.Add(new AsignacionCientificoDelCI(DateTime.Parse("27/02/1995"), new PersonalCientifico(888111, "Marcelo", "Lopez", 20225885, "", "", 0, null)));
+            var centro1 = new CentroDeInvestigacion("Universidad Nacional de Cordoba", "UNC", "", "", 1, "", "35125556932", "unc@unc.edu.ar", 0, DateTime.Parse("15/02/1996"), "", "", DateTime.Parse("15/02/1996"), 2, recursos1, cientificos1);
+
+            #region recursos CI2
+            List<RecursoTecnologico> recursos2 = new List<RecursoTecnologico>();
+
+            var recurso6 = new RecursoTecnologico(
+                6,
+                DateTime.Parse("21/01/2022 15:22 PM"),
+                new object(),
+                2,
+                1,
+                1,
+                cambiosEstadoRT.ToArray(),
+                new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
+                new Modelo("XS2-35", "Phillips"));
+
+            var recurso7 = new RecursoTecnologico(
+                7,
+                DateTime.Parse("21/01/2022 15:22 PM"),
+                new object(),
+                2,
+                1,
+                1,
+                cambiosEstadoRT.ToArray(),
+                new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
+                new Modelo("XS2-35-1", "Phillips"));
+
+
+            #endregion
+            List<AsignacionCientificoDelCI> cientificos2 = new List<AsignacionCientificoDelCI>();
+            cientificos2.Add(new AsignacionCientificoDelCI(DateTime.Parse("12/02/1990"), new PersonalCientifico(758889, "Carlos", "Saavedra", 15112887, "", "", 0, null)));
+            var centro2 = new CentroDeInvestigacion("Universidad Tecnologica Nacional - Regional Cordoba", "UTN - FRC", "", "", 1, "", "3514456669", "utn@frc.utn.edu.ar", 0, DateTime.Parse("15/01/1998"), "", "", DateTime.Parse("15/01/1998"), 5, recursos2, cientificos2);
+
+            centros.Add(centro1);
+            centros.Add(centro2);
+
+            return centros;
+        }
+
         public List<RecursoTecnologico> obtenerRecursosTecnologicos()
         {
             var cambiosEstadoRT = new List<CambioEstadoRT>();
@@ -386,10 +502,6 @@ namespace DSI_PPAI.Control
                 cambiosEstadoRT.ToArray(),
                 new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
                 new Modelo("AmScope M150C-I40X-1000X", "AmScope"));
-                recurso1.CentroDeInvestigacion = new CentroDeInvestigacion("Universidad Nacional de Cordoba", "UNC", "", "", 1, "", "35125556932", "unc@unc.edu.ar", 0, DateTime.Parse("15/02/1996"), "", "", DateTime.Parse("15/02/1996"), 2, "");
-                List<AsignacionCientificoDelCI> cientificos = new List<AsignacionCientificoDelCI>();
-                cientificos.Add(new AsignacionCientificoDelCI(DateTime.Parse("27/02/1995"), new PersonalCientifico(888111, "Marcelo", "Lopez", 20225885, "", "", 0, null)));
-                recurso1.CentroDeInvestigacion.Cientificos = cientificos;
 
             var recurso2 = new RecursoTecnologico(
                 2,
@@ -401,10 +513,6 @@ namespace DSI_PPAI.Control
                 cambiosEstadoRT.ToArray(),
                 new TipoRecursoTecnologico("Resonador Magnético alta complejidad", ""),
                 new Modelo("Ingenia Elition 3.0T", "Phillips"));
-                recurso2.CentroDeInvestigacion = new CentroDeInvestigacion("Universidad Nacional de Cordoba", "UNC", "", "", 1, "", "35125556932", "unc@unc.edu.ar", 0, DateTime.Parse("15/02/1996"), "", "", DateTime.Parse("15/02/1996"), 2, "");
-                List<AsignacionCientificoDelCI> cientificos2 = new List<AsignacionCientificoDelCI>();
-                cientificos2.Add(new AsignacionCientificoDelCI(DateTime.Parse("27/02/1995"), new PersonalCientifico(888111, "Marcelo", "Lopez", 20225885, "", "", 0, null)));
-                recurso2.CentroDeInvestigacion.Cientificos = cientificos2;
 
 
             var recurso3 = new RecursoTecnologico(
@@ -417,10 +525,6 @@ namespace DSI_PPAI.Control
                 cambiosEstadoRT.ToArray(),
                 new TipoRecursoTecnologico("Balanza de precisión analítica", ""),
                 new Modelo("Serie A-300", "Krey"));
-                recurso3.CentroDeInvestigacion = new CentroDeInvestigacion("Universidad Nacional de Cordoba", "UNC", "", "", 1, "", "35125556932", "unc@unc.edu.ar", 0, DateTime.Parse("15/02/1996"), "", "", DateTime.Parse("15/02/1996"), 2, "");
-                List<AsignacionCientificoDelCI> cientificos3 = new List<AsignacionCientificoDelCI>();
-                cientificos3.Add(new AsignacionCientificoDelCI(DateTime.Parse("27/02/1995"), new PersonalCientifico(888111, "Marcelo", "Lopez", 20225885, "", "", 0, null)));
-                recurso3.CentroDeInvestigacion.Cientificos = cientificos3;
 
 
             var recurso4 = new RecursoTecnologico(
@@ -433,10 +537,6 @@ namespace DSI_PPAI.Control
                 cambiosEstadoRT.ToArray(),
                 new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
                 new Modelo("AmScope M150C-I40X-1000X - E", "AmScope"));
-                recurso4.CentroDeInvestigacion = new CentroDeInvestigacion("Universidad Nacional de Cordoba", "UNC", "", "", 1, "", "35125556932", "unc@unc.edu.ar", 0, DateTime.Parse("15/02/1996"), "", "", DateTime.Parse("15/02/1996"), 2, "");
-                List<AsignacionCientificoDelCI> cientificos4 = new List<AsignacionCientificoDelCI>();
-                cientificos4.Add(new AsignacionCientificoDelCI(DateTime.Parse("27/02/1995"), new PersonalCientifico(888111, "Marcelo", "Lopez", 20225885, "", "", 0, null)));
-                recurso4.CentroDeInvestigacion.Cientificos = cientificos4;
 
 
             var recurso5 = new RecursoTecnologico(
@@ -449,10 +549,6 @@ namespace DSI_PPAI.Control
                 cambiosEstadoRT.ToArray(),
                 new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
                 new Modelo("Arcano Xsp-104", "Arcano"));
-                recurso5.CentroDeInvestigacion = new CentroDeInvestigacion("Universidad Nacional de Cordoba", "UNC", "", "", 1, "", "35125556932", "unc@unc.edu.ar", 0, DateTime.Parse("15/02/1996"), "", "", DateTime.Parse("15/02/1996"), 2, "");
-                List<AsignacionCientificoDelCI> cientificos5 = new List<AsignacionCientificoDelCI>();
-                cientificos5.Add(new AsignacionCientificoDelCI(DateTime.Parse("27/02/1995"), new PersonalCientifico(888111, "Marcelo", "Lopez", 20225885, "", "", 0, null)));
-                recurso5.CentroDeInvestigacion.Cientificos = cientificos5;
 
 
             var recurso6 = new RecursoTecnologico(
@@ -465,10 +561,6 @@ namespace DSI_PPAI.Control
                 cambiosEstadoRT.ToArray(),
                 new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
                 new Modelo("XS2-35", "Phillips"));
-                recurso6.CentroDeInvestigacion = new CentroDeInvestigacion("Universidad Tecnologica Nacional - Regional Cordoba", "UTN - FRC", "", "", 1, "", "3514456669", "utn@frc.utn.edu.ar", 0, DateTime.Parse("15/01/1998"), "", "", DateTime.Parse("15/01/1998"), 5, "");
-                List<AsignacionCientificoDelCI> cientificos6 = new List<AsignacionCientificoDelCI>();
-                cientificos6.Add(new AsignacionCientificoDelCI(DateTime.Parse("12/02/1990"), new PersonalCientifico(758889, "Carlos", "Saavedra", 15112887, "", "", 0, null)));
-                recurso6.CentroDeInvestigacion.Cientificos = cientificos6;
             
             var recurso7 = new RecursoTecnologico(
                 7,
@@ -480,10 +572,6 @@ namespace DSI_PPAI.Control
                 cambiosEstadoRT.ToArray(),
                 new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
                 new Modelo("XS2-35-1", "Phillips"));
-            recurso7.CentroDeInvestigacion = new CentroDeInvestigacion("Universidad Tecnologica Nacional - Regional Cordoba", "UTN - FRC", "", "", 1, "", "3514456669", "utn@frc.utn.edu.ar", 0, DateTime.Parse("15/01/1998"), "", "", DateTime.Parse("15/01/1998"), 5, "");
-            List<AsignacionCientificoDelCI> cientificos7 = new List<AsignacionCientificoDelCI>();
-            cientificos7.Add(new AsignacionCientificoDelCI(DateTime.Parse("12/02/1990"), new PersonalCientifico(758889, "Carlos", "Saavedra", 15112887, "", "", 0, null)));
-            recurso7.CentroDeInvestigacion.Cientificos = cientificos6;
 
             var lista = new List<RecursoTecnologico>();
             lista.Add(recurso1);
@@ -493,6 +581,18 @@ namespace DSI_PPAI.Control
             lista.Add(recurso5);
             lista.Add(recurso6);
             lista.Add(recurso7);
+            return lista;
+        }
+
+        public List<PersonalCientifico> obtenerCientificos()
+        {
+            List<PersonalCientifico> lista = new List<PersonalCientifico>();
+            var cientifico1 = new PersonalCientifico(888111, "Marcelo", "Lopez", 20225885, "", "", 0, new Usuario("123456", "lopez.marcelo", true));
+            var cientifico2 = new PersonalCientifico(758889, "Carlos", "Saavedra", 15112887, "", "", 0, new Usuario("987654321", "saavedra.carlos", true));
+
+            lista.Add(cientifico1);
+            lista.Add(cientifico2);
+
             return lista;
         }
 

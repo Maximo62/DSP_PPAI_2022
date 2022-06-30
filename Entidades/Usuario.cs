@@ -11,24 +11,28 @@ namespace DSI_PPAI.Entidades
         private string clave;
         private string usuarioNombre;
         private bool habilitado;
-        private PersonalCientifico personalCientifico;
 
-        public Usuario(string clave, string usuarioNombre, bool habilitado, PersonalCientifico personalCientifico)
+        public Usuario(string clave, string usuarioNombre, bool habilitado)
         {
             this.clave = clave;
             this.usuarioNombre = usuarioNombre;
             this.habilitado = habilitado;
-            this.personalCientifico = personalCientifico;
         }
 
         public string Clave { get => clave; set => clave = value; }
         public string UsuarioNombre { get => usuarioNombre; set => usuarioNombre = value; }
         public bool Habilitado { get => habilitado; set => habilitado = value; }
-        public PersonalCientifico PersonalCientifico { get => personalCientifico; set => personalCientifico = value; }
 
-        public PersonalCientifico getPersonalCientifico()
+        public PersonalCientifico getPersonalCientifico(List<PersonalCientifico> cientificos)
         {
-            return this.personalCientifico;
+            foreach (PersonalCientifico cientifico in cientificos)
+            {
+                if (cientifico.esTuUsuario(this))
+                {
+                    return cientifico;
+                }
+            }
+            return null;
         }
     }
 }

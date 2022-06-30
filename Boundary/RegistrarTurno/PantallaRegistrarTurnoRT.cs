@@ -93,12 +93,7 @@ namespace DSI_PPAI.Boundary
         {
             if (dgvRecursos.CurrentRow != null)
             {
-                Dictionary<string, string> recursoSeleccionado = new Dictionary<string, string>();
-                for (int i = 0; i < dgvRecursos.Columns.Count; i++)
-                {
-                    recursoSeleccionado.Add(dgvRecursos.Columns[i].Name, dgvRecursos.CurrentRow.Cells[i].Value.ToString());
-                }
-                gestorReservaTurnoRT.tomarSeleccionRT(recursoSeleccionado);
+                gestorReservaTurnoRT.tomarSeleccionRT(dgvRecursos.SelectedRows[0].Index);
             }
         }
 
