@@ -31,6 +31,7 @@ namespace DSI_PPAI.Control
         DateTime fechaHoraPlazoMinimo { get; set; }
         List<CentroDeInvestigacion> centrosDeInvestigacion { get; set; }
         CentroDeInvestigacion centroDeInvestigacionRecursoSeleccionado { get; set; }
+        Dictionary<string, string> datosAMostrarTurnoSeleccionado { get; set; }
 
 
 
@@ -122,7 +123,7 @@ namespace DSI_PPAI.Control
                 Dictionary<string, string> recursoAMostrar = new Dictionary<string, string>();
                 recursoAMostrar.Add("Centro de Investigacion", recurso.getCentroDeInvestigacion(this.centrosDeInvestigacion));
                 recursoAMostrar.Add("Numero de Recurso", recurso.NumeroRT.ToString());
-                recursoAMostrar.Add("Modelo y Marca", recurso.getModeloYMarca());
+                recursoAMostrar.Add("Modelo y Marca", recurso.getModeloYMarca(this.obtenerMarcas()));
                 recursoAMostrar.Add("Estado", recurso.getEstadoActual());
 
                 this.recursosActivosAMostrar.Add(recursoAMostrar);
@@ -216,18 +217,19 @@ namespace DSI_PPAI.Control
         }
 
         // tomamos el turno seleccionado y generamos el resumen de la reserva
-        public void tomarSeleccionTurno(Dictionary<string, string> turnoSeleccionado)
+        public void tomarSeleccionTurno(int indiceTurnoSeleccionado)
         {
-            this.turnoSeleccionado = this.turnosDeRecurso.FirstOrDefault(turno => turnoSeleccionado.ContainsValue(turno.NroTurno.ToString()));
+            this.datosAMostrarTurnoSeleccionado = this.turnosDeRecursoSeleccionado[indiceTurnoSeleccionado];
+            this.turnoSeleccionado = this.turnosDeRecurso.FirstOrDefault(turno => this.datosAMostrarTurnoSeleccionado.ContainsValue(turno.NroTurno.ToString()));
 
             List<string> datosConfirmacion = new List<string>();
             datosConfirmacion.Add(datosAMostrarRecursoTecnologicoSeleccionado.GetValueOrDefault("Numero de Recurso", ""));
             datosConfirmacion.Add(recursoSeleccionado.getNombreTipoRT());
             datosConfirmacion.Add(datosAMostrarRecursoTecnologicoSeleccionado.GetValueOrDefault("Modelo y Marca", ""));
             datosConfirmacion.Add(datosAMostrarRecursoTecnologicoSeleccionado.GetValueOrDefault("Centro de Investigacion", ""));
-            datosConfirmacion.Add(turnoSeleccionado.GetValueOrDefault("Dia Semana", ""));
-            datosConfirmacion.Add(turnoSeleccionado.GetValueOrDefault("Fecha y Hora Inicio", ""));
-            datosConfirmacion.Add(turnoSeleccionado.GetValueOrDefault("Fecha y Hora Fin", ""));
+            datosConfirmacion.Add(datosAMostrarTurnoSeleccionado.GetValueOrDefault("Dia Semana", ""));
+            datosConfirmacion.Add(datosAMostrarTurnoSeleccionado.GetValueOrDefault("Fecha y Hora Inicio", ""));
+            datosConfirmacion.Add(datosAMostrarTurnoSeleccionado.GetValueOrDefault("Fecha y Hora Fin", ""));
             datosConfirmacion.Add(cientificoLogueado.Apellido + ", " + cientificoLogueado.Nombre);
             datosConfirmacion.Add(cientificoLogueado.Legajo.ToString());
             this.datosReserva = datosConfirmacion;
@@ -294,307 +296,338 @@ namespace DSI_PPAI.Control
 
         #region "consultas" a la base ---> generamos los objetos simulando consultas
 
-        //Aqui se hacen las "Consultas a la base" para obtener los objetos de cada clase
+            //Aqui se hacen las "Consultas a la base" para obtener los objetos de cada clase
 
-        public List<Estado> obtenerEstados()
-        {
-            List<Estado> estados = new List<Estado>();
-            var estado1 = new Estado("Generado", "", "Turno", true, false);
-            var estado2 = new Estado("Ingresado", "", "RecursoTecnologico", true, false);
-            var estado3 = new Estado("Reservado", "", "Turno", false, true);
+            public List<Estado> obtenerEstados()
+            {
+                List<Estado> estados = new List<Estado>();
+                var estado1 = new Estado("Generado", "", "Turno", true, false);
+                var estado2 = new Estado("Ingresado", "", "RecursoTecnologico", true, false);
+                var estado3 = new Estado("Reservado", "", "Turno", false, true);
 
-            estados.Add(estado1);
-            estados.Add(estado2);
-            estados.Add(estado3);
+                estados.Add(estado1);
+                estados.Add(estado2);
+                estados.Add(estado3);
 
-            return estados;
-        }
-        // generamos los objetos con los tipos de notificacion seleccionables
-        public List<TipoNotificacion> obtenerTiposNotificacion()
-        {
-            var lista = new List<TipoNotificacion>();
-            var tipo1 = new TipoNotificacion(1, "Email", "");
-            var tipo2 = new TipoNotificacion(2, "WhatsApp", "");
-            var tipo3 = new TipoNotificacion(3, "Email y WhatsApp", "");
-            lista.Add(tipo1);
-            lista.Add(tipo2);
-            lista.Add(tipo3);
+                return estados;
+            }
+            // generamos los objetos con los tipos de notificacion seleccionables
+            public List<TipoNotificacion> obtenerTiposNotificacion()
+            {
+                var lista = new List<TipoNotificacion>();
+                var tipo1 = new TipoNotificacion(1, "Email", "");
+                var tipo2 = new TipoNotificacion(2, "WhatsApp", "");
+                var tipo3 = new TipoNotificacion(3, "Email y WhatsApp", "");
+                lista.Add(tipo1);
+                lista.Add(tipo2);
+                lista.Add(tipo3);
 
-            return lista;
-        }
+                return lista;
+            }
 
-        public List<TipoRecursoTecnologico> obtenerTiposRecursoTecnologico()
-        {
-            var lista = new List<TipoRecursoTecnologico>();
-            var tipo1 = new TipoRecursoTecnologico("Microscopio de contraste de fases", "");
-            var tipo2 = new TipoRecursoTecnologico("Resonador Magnético alta complejidad", "");
-            var tipo3 = new TipoRecursoTecnologico("Balanza de precisión analítica", "");
-            lista.Add(tipo1);
-            lista.Add(tipo2);
-            lista.Add(tipo3);
+            public List<TipoRecursoTecnologico> obtenerTiposRecursoTecnologico()
+            {
+                var lista = new List<TipoRecursoTecnologico>();
+                var tipo1 = new TipoRecursoTecnologico("Microscopio de contraste de fases", "");
+                var tipo2 = new TipoRecursoTecnologico("Resonador Magnético alta complejidad", "");
+                var tipo3 = new TipoRecursoTecnologico("Balanza de precisión analítica", "");
+                lista.Add(tipo1);
+                lista.Add(tipo2);
+                lista.Add(tipo3);
 
-            return lista;
-        }
+                return lista;
+            }
 
-        public List<Turno> obtenerTurnos(RecursoTecnologico recursoSeleccionado)
-        {
-            List<Turno> turnosDeRecurso = new List<Turno>();
-            var cambiosEstadoTurno = new List<CambioEstadoTurno>();
-            cambiosEstadoTurno.Add(new CambioEstadoTurno(DateTime.Parse("01/06/2022 08:00 AM"), new Estado("Disponible", "", "Turno", true, false)));
+            public List<Turno> obtenerTurnos(RecursoTecnologico recursoSeleccionado)
+            {
+                List<Turno> turnosDeRecurso = new List<Turno>();
+                var cambiosEstadoTurno = new List<CambioEstadoTurno>();
+                cambiosEstadoTurno.Add(new CambioEstadoTurno(DateTime.Parse("01/06/2022 08:00 AM"), new Estado("Disponible", "", "Turno", true, false)));
 
-            turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Lunes", DateTime.Parse("27/06/2022 08:00 AM"), DateTime.Parse("27/06/2022 11:00 AM"), cambiosEstadoTurno, 1));
-            turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Martes", DateTime.Parse("28/06/2022 08:00 AM"), DateTime.Parse("28/06/2022 11:00 AM"), cambiosEstadoTurno, 2));
-            turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Miercoles", DateTime.Parse("29/06/2022 08:00 AM"), DateTime.Parse("29/06/2022 11:00 AM"), cambiosEstadoTurno, 3));
-            turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Jueves", DateTime.Parse("30/06/2022 08:00 AM"), DateTime.Parse("30/06/2022 11:00 AM"), cambiosEstadoTurno, 4));
-            turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Viernes", DateTime.Parse("01/07/2022 08:00 AM"), DateTime.Parse("01/07/2022 11:00 AM"), cambiosEstadoTurno, 5));
+                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Lunes", DateTime.Parse("27/06/2022 08:00 AM"), DateTime.Parse("27/06/2022 11:00 AM"), cambiosEstadoTurno, 1));
+                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Martes", DateTime.Parse("28/06/2022 08:00 AM"), DateTime.Parse("28/06/2022 11:00 AM"), cambiosEstadoTurno, 2));
+                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Miercoles", DateTime.Parse("29/06/2022 08:00 AM"), DateTime.Parse("29/06/2022 11:00 AM"), cambiosEstadoTurno, 3));
+                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Jueves", DateTime.Parse("30/06/2022 08:00 AM"), DateTime.Parse("30/06/2022 11:00 AM"), cambiosEstadoTurno, 4));
+                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Viernes", DateTime.Parse("01/07/2022 08:00 AM"), DateTime.Parse("01/07/2022 11:00 AM"), cambiosEstadoTurno, 5));
 
-            var cambiosEstadoTurno2 = new List<CambioEstadoTurno>();
-            cambiosEstadoTurno2.Add(new CambioEstadoTurno(DateTime.Parse("01/06/2022 08:00 AM"), new Estado("Disponible", "", "Turno", true, false)));
-            cambiosEstadoTurno2[0].FechaHoraHasta = DateTime.Parse("01/06/2022 08:00 AM");
-            cambiosEstadoTurno2.Add(new CambioEstadoTurno(DateTime.Parse("01/06/2022 08:00 AM"), new Estado("Pendiente de Confirmacion", "", "Turno", false, true)));
+                var cambiosEstadoTurno2 = new List<CambioEstadoTurno>();
+                cambiosEstadoTurno2.Add(new CambioEstadoTurno(DateTime.Parse("01/06/2022 08:00 AM"), new Estado("Disponible", "", "Turno", true, false)));
+                cambiosEstadoTurno2[0].FechaHoraHasta = DateTime.Parse("01/06/2022 08:00 AM");
+                cambiosEstadoTurno2.Add(new CambioEstadoTurno(DateTime.Parse("01/06/2022 08:00 AM"), new Estado("Pendiente de Confirmacion", "", "Turno", false, true)));
 
-            turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Lunes", DateTime.Parse("27/06/2022 15:00 PM"), DateTime.Parse("27/06/2022 18:00 PM"), cambiosEstadoTurno2, 6));
-            turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Martes", DateTime.Parse("28/06/2022 15:00 PM"), DateTime.Parse("28/06/2022 18:00 PM"), cambiosEstadoTurno2, 7));
-            turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Viernes", DateTime.Parse("01/07/2022 15:00 PM"), DateTime.Parse("01/07/2022 18:00 PM"), cambiosEstadoTurno2, 8));
+                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Lunes", DateTime.Parse("27/06/2022 15:00 PM"), DateTime.Parse("27/06/2022 18:00 PM"), cambiosEstadoTurno2, 6));
+                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Martes", DateTime.Parse("28/06/2022 15:00 PM"), DateTime.Parse("28/06/2022 18:00 PM"), cambiosEstadoTurno2, 7));
+                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Viernes", DateTime.Parse("01/07/2022 15:00 PM"), DateTime.Parse("01/07/2022 18:00 PM"), cambiosEstadoTurno2, 8));
 
-            var cambiosEstadoTurno3 = new List<CambioEstadoTurno>();
-            cambiosEstadoTurno3.Add(new CambioEstadoTurno(DateTime.Parse("01/06/2022 08:00 AM"), new Estado("Disponible", "", "Turno", true, false)));
-            cambiosEstadoTurno3[0].FechaHoraHasta = DateTime.Parse("01/06/2022 08:00 AM");
-            cambiosEstadoTurno3.Add(new CambioEstadoTurno(DateTime.Parse("01/06/2022 08:00 AM"), new Estado("Pendiente de Confirmacion", "", "Turno", false, true)));
-            cambiosEstadoTurno3[1].FechaHoraHasta = DateTime.Parse("01/06/2022 08:00 AM");
-            cambiosEstadoTurno3.Add(new CambioEstadoTurno(DateTime.Parse("01/06/2022 08:00 AM"), new Estado("Reservado", "", "Turno", false, false)));
+                var cambiosEstadoTurno3 = new List<CambioEstadoTurno>();
+                cambiosEstadoTurno3.Add(new CambioEstadoTurno(DateTime.Parse("01/06/2022 08:00 AM"), new Estado("Disponible", "", "Turno", true, false)));
+                cambiosEstadoTurno3[0].FechaHoraHasta = DateTime.Parse("01/06/2022 08:00 AM");
+                cambiosEstadoTurno3.Add(new CambioEstadoTurno(DateTime.Parse("01/06/2022 08:00 AM"), new Estado("Pendiente de Confirmacion", "", "Turno", false, true)));
+                cambiosEstadoTurno3[1].FechaHoraHasta = DateTime.Parse("01/06/2022 08:00 AM");
+                cambiosEstadoTurno3.Add(new CambioEstadoTurno(DateTime.Parse("01/06/2022 08:00 AM"), new Estado("Reservado", "", "Turno", false, false)));
 
-            turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Lunes", DateTime.Parse("27/06/2022 20:00 PM"), DateTime.Parse("27/06/2022 22:00 PM"), cambiosEstadoTurno3, 9));
-            turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Martes", DateTime.Parse("28/06/2022 20:00 PM"), DateTime.Parse("28/06/2022 22:00 PM"), cambiosEstadoTurno3, 10));
-            turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Miercoles", DateTime.Parse("29/06/2022 15:00 PM"), DateTime.Parse("29/06/2022 18:00 PM"), cambiosEstadoTurno3, 11));
-            turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Jueves", DateTime.Parse("29/06/2022 15:00 PM"), DateTime.Parse("29/06/2022 18:00 PM"), cambiosEstadoTurno3, 12));
-
-
-            this.recursoSeleccionado.Turnos = turnosDeRecurso;
-
-            return turnosDeRecurso;
-        }
-
-        public List<CentroDeInvestigacion> obtenerCentrosDeInvestigacion()
-        {
-            var cambiosEstadoRT = new List<CambioEstadoRT>();
-            cambiosEstadoRT.Add(new CambioEstadoRT(DateTime.Parse("15/06/2022"), new Estado("Ingresado", "", "Recurso Tecnologico", true, false)));
-
-            List<CentroDeInvestigacion> centros = new List<CentroDeInvestigacion>();
-
-            #region recursos CI 1
-
-            List<RecursoTecnologico> recursos1 = new List<RecursoTecnologico>();
-            var recurso1 = new RecursoTecnologico(
-                1,
-                DateTime.Parse("20/06/2022 15:22 PM"),
-                new object(),
-                2,
-                1,
-                1,
-                cambiosEstadoRT.ToArray(),
-                new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
-                new Modelo("AmScope M150C-I40X-1000X", "AmScope"));
-
-            var recurso2 = new RecursoTecnologico(
-                2,
-                DateTime.Parse("18/06/2022 15:22 PM"),
-                new object(),
-                3,
-                2,
-                2,
-                cambiosEstadoRT.ToArray(),
-                new TipoRecursoTecnologico("Resonador Magnético alta complejidad", ""),
-                new Modelo("Ingenia Elition 3.0T", "Phillips"));
-
-            var recurso3 = new RecursoTecnologico(
-                3,
-                DateTime.Parse("12/06/2022 15:22 PM"),
-                new object(),
-                3,
-                1,
-                1,
-                cambiosEstadoRT.ToArray(),
-                new TipoRecursoTecnologico("Balanza de precisión analítica", ""),
-                new Modelo("Serie A-300", "Krey"));
-
-            var recurso4 = new RecursoTecnologico(
-                4,
-                DateTime.Parse("15/04/2022 15:20 PM"),
-                new object(),
-                2,
-                1,
-                1,
-                cambiosEstadoRT.ToArray(),
-                new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
-                new Modelo("AmScope M150C-I40X-1000X - E", "AmScope"));
-
-            var recurso5 = new RecursoTecnologico(
-                5,
-                DateTime.Parse("21/01/2022 15:22 PM"),
-                new object(),
-                2,
-                1,
-                1,
-                cambiosEstadoRT.ToArray(),
-                new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
-                new Modelo("Arcano Xsp-104", "Arcano"));
-
-            recursos1.Add(recurso1);
-            recursos1.Add(recurso2);
-            recursos1.Add(recurso3);
-            recursos1.Add(recurso4);
-            recursos1.Add(recurso5);
-            #endregion
-            List<AsignacionCientificoDelCI> cientificos1 = new List<AsignacionCientificoDelCI>();
-            cientificos1.Add(new AsignacionCientificoDelCI(DateTime.Parse("27/02/1995"), new PersonalCientifico(888111, "Marcelo", "Lopez", 20225885, "", "", 0, null)));
-            var centro1 = new CentroDeInvestigacion("Universidad Nacional de Cordoba", "UNC", "", "", 1, "", "35125556932", "unc@unc.edu.ar", 0, DateTime.Parse("15/02/1996"), "", "", DateTime.Parse("15/02/1996"), 2, recursos1, cientificos1);
-
-            #region recursos CI2
-            List<RecursoTecnologico> recursos2 = new List<RecursoTecnologico>();
-
-            var recurso6 = new RecursoTecnologico(
-                6,
-                DateTime.Parse("21/01/2022 15:22 PM"),
-                new object(),
-                2,
-                1,
-                1,
-                cambiosEstadoRT.ToArray(),
-                new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
-                new Modelo("XS2-35", "Phillips"));
-
-            var recurso7 = new RecursoTecnologico(
-                7,
-                DateTime.Parse("21/01/2022 15:22 PM"),
-                new object(),
-                2,
-                1,
-                1,
-                cambiosEstadoRT.ToArray(),
-                new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
-                new Modelo("XS2-35-1", "Phillips"));
+                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Lunes", DateTime.Parse("27/06/2022 20:00 PM"), DateTime.Parse("27/06/2022 22:00 PM"), cambiosEstadoTurno3, 9));
+                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Martes", DateTime.Parse("28/06/2022 20:00 PM"), DateTime.Parse("28/06/2022 22:00 PM"), cambiosEstadoTurno3, 10));
+                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Miercoles", DateTime.Parse("29/06/2022 15:00 PM"), DateTime.Parse("29/06/2022 18:00 PM"), cambiosEstadoTurno3, 11));
+                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Jueves", DateTime.Parse("29/06/2022 15:00 PM"), DateTime.Parse("29/06/2022 18:00 PM"), cambiosEstadoTurno3, 12));
 
 
-            #endregion
-            List<AsignacionCientificoDelCI> cientificos2 = new List<AsignacionCientificoDelCI>();
-            cientificos2.Add(new AsignacionCientificoDelCI(DateTime.Parse("12/02/1990"), new PersonalCientifico(758889, "Carlos", "Saavedra", 15112887, "", "", 0, null)));
-            var centro2 = new CentroDeInvestigacion("Universidad Tecnologica Nacional - Regional Cordoba", "UTN - FRC", "", "", 1, "", "3514456669", "utn@frc.utn.edu.ar", 0, DateTime.Parse("15/01/1998"), "", "", DateTime.Parse("15/01/1998"), 5, recursos2, cientificos2);
+                this.recursoSeleccionado.Turnos = turnosDeRecurso;
 
-            centros.Add(centro1);
-            centros.Add(centro2);
+                return turnosDeRecurso;
+            }
 
-            return centros;
-        }
+            public List<CentroDeInvestigacion> obtenerCentrosDeInvestigacion()
+            {
+                var cambiosEstadoRT = new List<CambioEstadoRT>();
+                cambiosEstadoRT.Add(new CambioEstadoRT(DateTime.Parse("15/06/2022"), new Estado("Ingresado", "", "Recurso Tecnologico", true, false)));
 
-        public List<RecursoTecnologico> obtenerRecursosTecnologicos()
-        {
-            var cambiosEstadoRT = new List<CambioEstadoRT>();
-            cambiosEstadoRT.Add(new CambioEstadoRT(DateTime.Parse("15/06/2022"), new Estado("Ingresado", "", "Recurso Tecnologico", true, false)));
+                List<CentroDeInvestigacion> centros = new List<CentroDeInvestigacion>();
 
-            var recurso1 = new RecursoTecnologico(
-                1,
-                DateTime.Parse("20/06/2022 15:22 PM"),
-                new object(),
-                2,
-                1,
-                1,
-                cambiosEstadoRT.ToArray(),
-                new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
-                new Modelo("AmScope M150C-I40X-1000X", "AmScope"));
+                #region recursos CI 1
 
-            var recurso2 = new RecursoTecnologico(
-                2,
-                DateTime.Parse("18/06/2022 15:22 PM"),
-                new object(),
-                3,
-                2,
-                2,
-                cambiosEstadoRT.ToArray(),
-                new TipoRecursoTecnologico("Resonador Magnético alta complejidad", ""),
-                new Modelo("Ingenia Elition 3.0T", "Phillips"));
+                List<RecursoTecnologico> recursos1 = new List<RecursoTecnologico>();
+                var recurso1 = new RecursoTecnologico(
+                    1,
+                    DateTime.Parse("20/06/2022 15:22 PM"),
+                    new object(),
+                    2,
+                    1,
+                    1,
+                    cambiosEstadoRT.ToArray(),
+                    new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
+                    new Modelo("AmScope M150C-I40X-1000X"));
+
+                var recurso2 = new RecursoTecnologico(
+                    2,
+                    DateTime.Parse("18/06/2022 15:22 PM"),
+                    new object(),
+                    3,
+                    2,
+                    2,
+                    cambiosEstadoRT.ToArray(),
+                    new TipoRecursoTecnologico("Resonador Magnético alta complejidad", ""),
+                    new Modelo("Ingenia Elition 3.0T"));
+
+                var recurso3 = new RecursoTecnologico(
+                    3,
+                    DateTime.Parse("12/06/2022 15:22 PM"),
+                    new object(),
+                    3,
+                    1,
+                    1,
+                    cambiosEstadoRT.ToArray(),
+                    new TipoRecursoTecnologico("Balanza de precisión analítica", ""),
+                    new Modelo("Serie A-300"));
+
+                var recurso4 = new RecursoTecnologico(
+                    4,
+                    DateTime.Parse("15/04/2022 15:20 PM"),
+                    new object(),
+                    2,
+                    1,
+                    1,
+                    cambiosEstadoRT.ToArray(),
+                    new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
+                    new Modelo("AmScope M150C-I40X-1000X - E"));
+
+                var recurso5 = new RecursoTecnologico(
+                    5,
+                    DateTime.Parse("21/01/2022 15:22 PM"),
+                    new object(),
+                    2,
+                    1,
+                    1,
+                    cambiosEstadoRT.ToArray(),
+                    new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
+                    new Modelo("Arcano Xsp-104"));
+
+                recursos1.Add(recurso1);
+                recursos1.Add(recurso2);
+                recursos1.Add(recurso3);
+                recursos1.Add(recurso4);
+                recursos1.Add(recurso5);
+                #endregion
+                List<AsignacionCientificoDelCI> cientificos1 = new List<AsignacionCientificoDelCI>();
+                cientificos1.Add(new AsignacionCientificoDelCI(DateTime.Parse("27/02/1995"), new PersonalCientifico(888111, "Marcelo", "Lopez", 20225885, "", "", 0, null)));
+                var centro1 = new CentroDeInvestigacion("Universidad Nacional de Cordoba", "UNC", "", "", 1, "", "35125556932", "unc@unc.edu.ar", 0, DateTime.Parse("15/02/1996"), "", "", DateTime.Parse("15/02/1996"), 2, recursos1, cientificos1);
+
+                #region recursos CI2
+                List<RecursoTecnologico> recursos2 = new List<RecursoTecnologico>();
+
+                var recurso6 = new RecursoTecnologico(
+                    6,
+                    DateTime.Parse("21/01/2022 15:22 PM"),
+                    new object(),
+                    2,
+                    1,
+                    1,
+                    cambiosEstadoRT.ToArray(),
+                    new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
+                    new Modelo("XS2-35"));
+
+                var recurso7 = new RecursoTecnologico(
+                    7,
+                    DateTime.Parse("21/01/2022 15:22 PM"),
+                    new object(),
+                    2,
+                    1,
+                    1,
+                    cambiosEstadoRT.ToArray(),
+                    new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
+                    new Modelo("XS2-35-1"));
 
 
-            var recurso3 = new RecursoTecnologico(
-                3,
-                DateTime.Parse("12/06/2022 15:22 PM"),
-                new object(),
-                3,
-                1,
-                1,
-                cambiosEstadoRT.ToArray(),
-                new TipoRecursoTecnologico("Balanza de precisión analítica", ""),
-                new Modelo("Serie A-300", "Krey"));
+                #endregion
+                List<AsignacionCientificoDelCI> cientificos2 = new List<AsignacionCientificoDelCI>();
+                cientificos2.Add(new AsignacionCientificoDelCI(DateTime.Parse("12/02/1990"), new PersonalCientifico(758889, "Carlos", "Saavedra", 15112887, "", "", 0, null)));
+                var centro2 = new CentroDeInvestigacion("Universidad Tecnologica Nacional - Regional Cordoba", "UTN - FRC", "", "", 1, "", "3514456669", "utn@frc.utn.edu.ar", 0, DateTime.Parse("15/01/1998"), "", "", DateTime.Parse("15/01/1998"), 5, recursos2, cientificos2);
+
+                centros.Add(centro1);
+                centros.Add(centro2);
+
+                return centros;
+            }
+
+            public List<RecursoTecnologico> obtenerRecursosTecnologicos()
+            {
+                var cambiosEstadoRT = new List<CambioEstadoRT>();
+                cambiosEstadoRT.Add(new CambioEstadoRT(DateTime.Parse("15/06/2022"), new Estado("Ingresado", "", "Recurso Tecnologico", true, false)));
+
+                var recurso1 = new RecursoTecnologico(
+                    1,
+                    DateTime.Parse("20/06/2022 15:22 PM"),
+                    new object(),
+                    2,
+                    1,
+                    1,
+                    cambiosEstadoRT.ToArray(),
+                    new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
+                    new Modelo("AmScope M150C-I40X-1000X"));
+
+                var recurso2 = new RecursoTecnologico(
+                    2,
+                    DateTime.Parse("18/06/2022 15:22 PM"),
+                    new object(),
+                    3,
+                    2,
+                    2,
+                    cambiosEstadoRT.ToArray(),
+                    new TipoRecursoTecnologico("Resonador Magnético alta complejidad", ""),
+                    new Modelo("Ingenia Elition 3.0T"));
 
 
-            var recurso4 = new RecursoTecnologico(
-                4,
-                DateTime.Parse("15/04/2022 15:20 PM"),
-                new object(),
-                2,
-                1,
-                1,
-                cambiosEstadoRT.ToArray(),
-                new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
-                new Modelo("AmScope M150C-I40X-1000X - E", "AmScope"));
+                var recurso3 = new RecursoTecnologico(
+                    3,
+                    DateTime.Parse("12/06/2022 15:22 PM"),
+                    new object(),
+                    3,
+                    1,
+                    1,
+                    cambiosEstadoRT.ToArray(),
+                    new TipoRecursoTecnologico("Balanza de precisión analítica", ""),
+                    new Modelo("Serie A-300"));
 
 
-            var recurso5 = new RecursoTecnologico(
-                5,
-                DateTime.Parse("21/01/2022 15:22 PM"),
-                new object(),
-                2,
-                1,
-                1,
-                cambiosEstadoRT.ToArray(),
-                new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
-                new Modelo("Arcano Xsp-104", "Arcano"));
+                var recurso4 = new RecursoTecnologico(
+                    4,
+                    DateTime.Parse("15/04/2022 15:20 PM"),
+                    new object(),
+                    2,
+                    1,
+                    1,
+                    cambiosEstadoRT.ToArray(),
+                    new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
+                    new Modelo("AmScope M150C-I40X-1000X - E"));
 
 
-            var recurso6 = new RecursoTecnologico(
-                6,
-                DateTime.Parse("21/01/2022 15:22 PM"),
-                new object(),
-                2,
-                1,
-                1,
-                cambiosEstadoRT.ToArray(),
-                new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
-                new Modelo("XS2-35", "Phillips"));
+                var recurso5 = new RecursoTecnologico(
+                    5,
+                    DateTime.Parse("21/01/2022 15:22 PM"),
+                    new object(),
+                    2,
+                    1,
+                    1,
+                    cambiosEstadoRT.ToArray(),
+                    new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
+                    new Modelo("Arcano Xsp-104"));
+
+
+                var recurso6 = new RecursoTecnologico(
+                    6,
+                    DateTime.Parse("21/01/2022 15:22 PM"),
+                    new object(),
+                    2,
+                    1,
+                    1,
+                    cambiosEstadoRT.ToArray(),
+                    new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
+                    new Modelo("XS2-35"));
             
-            var recurso7 = new RecursoTecnologico(
-                7,
-                DateTime.Parse("21/01/2022 15:22 PM"),
-                new object(),
-                2,
-                1,
-                1,
-                cambiosEstadoRT.ToArray(),
-                new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
-                new Modelo("XS2-35-1", "Phillips"));
+                var recurso7 = new RecursoTecnologico(
+                    7,
+                    DateTime.Parse("21/01/2022 15:22 PM"),
+                    new object(),
+                    2,
+                    1,
+                    1,
+                    cambiosEstadoRT.ToArray(),
+                    new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
+                    new Modelo("XS2-35-1"));
 
-            var lista = new List<RecursoTecnologico>();
-            lista.Add(recurso1);
-            lista.Add(recurso2);
-            lista.Add(recurso3);
-            lista.Add(recurso4);
-            lista.Add(recurso5);
-            lista.Add(recurso6);
-            lista.Add(recurso7);
-            return lista;
-        }
+                var lista = new List<RecursoTecnologico>();
+                lista.Add(recurso1);
+                lista.Add(recurso2);
+                lista.Add(recurso3);
+                lista.Add(recurso4);
+                lista.Add(recurso5);
+                lista.Add(recurso6);
+                lista.Add(recurso7);
+                return lista;
+            }
 
-        public List<PersonalCientifico> obtenerCientificos()
-        {
-            List<PersonalCientifico> lista = new List<PersonalCientifico>();
-            var cientifico1 = new PersonalCientifico(888111, "Marcelo", "Lopez", 20225885, "", "", 0, new Usuario("123456", "lopez.marcelo", true));
-            var cientifico2 = new PersonalCientifico(758889, "Carlos", "Saavedra", 15112887, "", "", 0, new Usuario("987654321", "saavedra.carlos", true));
+            public List<PersonalCientifico> obtenerCientificos()
+            {
+                List<PersonalCientifico> lista = new List<PersonalCientifico>();
+                var cientifico1 = new PersonalCientifico(888111, "Marcelo", "Lopez", 20225885, "", "", 0, new Usuario("123456", "lopez.marcelo", true));
+                var cientifico2 = new PersonalCientifico(758889, "Carlos", "Saavedra", 15112887, "", "", 0, new Usuario("987654321", "saavedra.carlos", true));
 
-            lista.Add(cientifico1);
-            lista.Add(cientifico2);
+                lista.Add(cientifico1);
+                lista.Add(cientifico2);
 
-            return lista;
-        }
+                return lista;
+            }
+
+            public List<Marca> obtenerMarcas()
+            {
+                List<Marca> lista = new List<Marca>();
+
+                List<Modelo> modelos1 = new List<Modelo>();
+                modelos1.Add(new Modelo("AmScope M150C-I40X-1000X"));
+                modelos1.Add(new Modelo("AmScope M150C-I40X-1000X - E"));
+                var marca1 = new Marca("AmScope", modelos1);
+
+                List<Modelo> modelos2 = new List<Modelo>();
+                modelos2.Add(new Modelo("Arcano Xsp-104"));
+                var marca2 = new Marca("Arcano", modelos2);
+
+                List<Modelo> modelos3 = new List<Modelo>();
+                modelos3.Add(new Modelo("Serie A-300"));
+                var marca3 = new Marca("Krey", modelos3);
+
+                List<Modelo> modelos4 = new List<Modelo>();
+                modelos4.Add(new Modelo("Ingenia Elition 3.0T"));
+                modelos4.Add(new Modelo("XS2-35"));
+                modelos4.Add(new Modelo("XS2-35-1"));
+                var marca4 = new Marca("Phillips", modelos4);
+
+                lista.Add(marca1);
+                lista.Add(marca2);
+                lista.Add(marca3);
+                lista.Add(marca4);
+
+                return lista;
+            }
 
         #endregion
 

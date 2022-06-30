@@ -114,12 +114,7 @@ namespace DSI_PPAI.Boundary
         {
             if (dgvTurnos.CurrentRow != null)
             {
-                Dictionary<string, string> turnoSeleccionado = new Dictionary<string, string>();
-                for (int i = 0; i < dgvTurnos.Columns.Count; i++)
-                {
-                    turnoSeleccionado.Add(dgvTurnos.Columns[i].Name, dgvTurnos.CurrentRow.Cells[i].Value.ToString());
-                }
-                gestorReservaTurnoRT.tomarSeleccionTurno(turnoSeleccionado);
+                gestorReservaTurnoRT.tomarSeleccionTurno(dgvTurnos.SelectedRows[0].Index);
             }
         }
 

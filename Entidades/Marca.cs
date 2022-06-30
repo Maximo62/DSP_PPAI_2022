@@ -9,15 +9,27 @@ namespace DSI_PPAI.Entidades
     public class Marca
     {
         private string nombre;
-        private Modelo[] modelos;
+        private List<Modelo> modelos;
 
-        public Marca(string nombre, Modelo[] modelos)
+        public Marca(string nombre, List<Modelo> modelos)
         {
             this.nombre = nombre;
             this.modelos = modelos;
         }
 
         public string Nombre { get => nombre; set => nombre = value; }
-        public Modelo[] Modelos { get => modelos; set => modelos = value; }
+        public List<Modelo> Modelos { get => modelos; set => modelos = value; }
+
+        public bool esTuModelo(Modelo modeloAComprobar)
+        {
+            foreach (Modelo modelo in Modelos)
+            {
+                if (modelo.Nombre.Equals(modeloAComprobar.Nombre))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

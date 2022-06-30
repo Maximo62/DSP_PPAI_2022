@@ -9,21 +9,25 @@ namespace DSI_PPAI.Entidades
     public class Modelo
     {
         private string nombre;
-        private string marca;
 
-        public Modelo(string nombre, string marca)
+        public Modelo(string nombre)
         {
             this.nombre = nombre;
-            this.Marca = marca;
         }
 
         public string Nombre { get => nombre; set => nombre = value; }
-        public string Marca { get => marca; set => marca = value; }
 
 
-        public string getModeloYMarca()
+        public string getModeloYMarca(List<Marca> marcas)
         {
-            return this.Nombre + " - " + this.Marca;
+            foreach (Marca marca in marcas)
+            {
+                if (marca.esTuModelo(this))
+                {
+                    return this.Nombre + " - " + marca.Nombre;
+                }
+            }
+            return "";
         }
     }
 }

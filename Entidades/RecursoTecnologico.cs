@@ -107,9 +107,9 @@ namespace DSI_PPAI.Entidades {
             return "";
         }
 
-        public string getModeloYMarca()
+        public string getModeloYMarca(List<Marca> marcas)
         {
-            return this.modelo.getModeloYMarca();
+            return this.modelo.getModeloYMarca(marcas);
         }
 
         public bool esCientificoDeCI(CentroDeInvestigacion centro, PersonalCientifico cientificoLogueado)
