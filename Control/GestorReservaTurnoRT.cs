@@ -16,7 +16,7 @@ namespace DSI_PPAI.Control
         TipoRecursoTecnologico tipoRecursoSeleccionado { get; set; }
         List<RecursoTecnologico> recursosActivos { get; set; }
         List<Dictionary<string, string>> recursosActivosAMostrar { get; set; }
-        RecursoTecnologico? recursoSeleccionado { get; set; }
+        RecursoTecnologico recursoSeleccionado { get; set; }
         Sesion sesionActual { get; set; }
         PersonalCientifico cientificoLogueado { get; set; }
         DateTime fechaHoraActual { get; set; }
@@ -301,7 +301,7 @@ namespace DSI_PPAI.Control
             {
                 List<Estado> estados = new List<Estado>();
                 var estado1 = new Estado("Generado", "", "Turno", true, false);
-                var estado2 = new Estado("Ingresado", "", "RecursoTecnologico", true, false);
+                var estado2 = new Estado("Disponible", "", "RecursoTecnologico", true, false);
                 var estado3 = new Estado("Reservado", "", "Turno", false, true);
 
                 estados.Add(estado1);
@@ -343,45 +343,51 @@ namespace DSI_PPAI.Control
                 var cambiosEstadoTurno = new List<CambioEstadoTurno>();
                 cambiosEstadoTurno.Add(new CambioEstadoTurno(DateTime.Parse("01/06/2022 08:00 AM"), new Estado("Disponible", "", "Turno", true, false)));
 
-                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Lunes", DateTime.Parse("27/06/2022 08:00 AM"), DateTime.Parse("27/06/2022 11:00 AM"), cambiosEstadoTurno, 1));
-                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Martes", DateTime.Parse("28/06/2022 08:00 AM"), DateTime.Parse("28/06/2022 11:00 AM"), cambiosEstadoTurno, 2));
-                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Miercoles", DateTime.Parse("29/06/2022 08:00 AM"), DateTime.Parse("29/06/2022 11:00 AM"), cambiosEstadoTurno, 3));
-                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Jueves", DateTime.Parse("30/06/2022 08:00 AM"), DateTime.Parse("30/06/2022 11:00 AM"), cambiosEstadoTurno, 4));
-                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Viernes", DateTime.Parse("01/07/2022 08:00 AM"), DateTime.Parse("01/07/2022 11:00 AM"), cambiosEstadoTurno, 5));
+                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/07/2022"), "Lunes", DateTime.Parse("04/07/2022 08:00 AM"), DateTime.Parse("04/07/2022 11:00 AM"), cambiosEstadoTurno, 1));
+                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/07/2022"), "Martes", DateTime.Parse("05/07/2022 08:00 AM"), DateTime.Parse("05/07/2022 11:00 AM"), cambiosEstadoTurno, 2));
+                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/07/2022"), "Miercoles", DateTime.Parse("06/07/2022 08:00 AM"), DateTime.Parse("06/07/2022 11:00 AM"), cambiosEstadoTurno, 3));
+                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/07/2022"), "Jueves", DateTime.Parse("07/07/2022 08:00 AM"), DateTime.Parse("07/07/2022 11:00 AM"), cambiosEstadoTurno, 4));
+                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/07/2022"), "Viernes", DateTime.Parse("08/07/2022 08:00 AM"), DateTime.Parse("08/07/2022 11:00 AM"), cambiosEstadoTurno, 5));
 
                 var cambiosEstadoTurno2 = new List<CambioEstadoTurno>();
                 cambiosEstadoTurno2.Add(new CambioEstadoTurno(DateTime.Parse("01/06/2022 08:00 AM"), new Estado("Disponible", "", "Turno", true, false)));
                 cambiosEstadoTurno2[0].FechaHoraHasta = DateTime.Parse("01/06/2022 08:00 AM");
-                cambiosEstadoTurno2.Add(new CambioEstadoTurno(DateTime.Parse("01/06/2022 08:00 AM"), new Estado("Pendiente de Confirmacion", "", "Turno", false, true)));
+                cambiosEstadoTurno2.Add(new CambioEstadoTurno(DateTime.Parse("01/07/2022 08:00 AM"), new Estado("Pendiente de Confirmacion", "", "Turno", false, true)));
 
-                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Lunes", DateTime.Parse("27/06/2022 15:00 PM"), DateTime.Parse("27/06/2022 18:00 PM"), cambiosEstadoTurno2, 6));
-                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Martes", DateTime.Parse("28/06/2022 15:00 PM"), DateTime.Parse("28/06/2022 18:00 PM"), cambiosEstadoTurno2, 7));
-                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Viernes", DateTime.Parse("01/07/2022 15:00 PM"), DateTime.Parse("01/07/2022 18:00 PM"), cambiosEstadoTurno2, 8));
+                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/07/2022"), "Lunes", DateTime.Parse("04/07/2022 15:00 PM"), DateTime.Parse("04/07/2022 18:00 PM"), cambiosEstadoTurno2, 6));
+                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/07/2022"), "Martes", DateTime.Parse("05/07/2022 15:00 PM"), DateTime.Parse("05/07/2022 18:00 PM"), cambiosEstadoTurno2, 7));
+                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/07/2022"), "Viernes", DateTime.Parse("08/07/2022 15:00 PM"), DateTime.Parse("08/07/2022 18:00 PM"), cambiosEstadoTurno2, 8));
 
                 var cambiosEstadoTurno3 = new List<CambioEstadoTurno>();
                 cambiosEstadoTurno3.Add(new CambioEstadoTurno(DateTime.Parse("01/06/2022 08:00 AM"), new Estado("Disponible", "", "Turno", true, false)));
                 cambiosEstadoTurno3[0].FechaHoraHasta = DateTime.Parse("01/06/2022 08:00 AM");
                 cambiosEstadoTurno3.Add(new CambioEstadoTurno(DateTime.Parse("01/06/2022 08:00 AM"), new Estado("Pendiente de Confirmacion", "", "Turno", false, true)));
                 cambiosEstadoTurno3[1].FechaHoraHasta = DateTime.Parse("01/06/2022 08:00 AM");
-                cambiosEstadoTurno3.Add(new CambioEstadoTurno(DateTime.Parse("01/06/2022 08:00 AM"), new Estado("Reservado", "", "Turno", false, false)));
+                cambiosEstadoTurno3.Add(new CambioEstadoTurno(DateTime.Parse("01/07/2022 08:00 AM"), new Estado("Reservado", "", "Turno", false, false)));
 
-                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Lunes", DateTime.Parse("27/06/2022 20:00 PM"), DateTime.Parse("27/06/2022 22:00 PM"), cambiosEstadoTurno3, 9));
-                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Martes", DateTime.Parse("28/06/2022 20:00 PM"), DateTime.Parse("28/06/2022 22:00 PM"), cambiosEstadoTurno3, 10));
-                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Miercoles", DateTime.Parse("29/06/2022 15:00 PM"), DateTime.Parse("29/06/2022 18:00 PM"), cambiosEstadoTurno3, 11));
-                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Jueves", DateTime.Parse("29/06/2022 15:00 PM"), DateTime.Parse("29/06/2022 18:00 PM"), cambiosEstadoTurno3, 12));
+                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Lunes", DateTime.Parse("04/07/2022 20:00 PM"), DateTime.Parse("04/07/2022 22:00 PM"), cambiosEstadoTurno3, 9));
+                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Martes", DateTime.Parse("05/07/2022 20:00 PM"), DateTime.Parse("05/07/2022 22:00 PM"), cambiosEstadoTurno3, 10));
+                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Miercoles", DateTime.Parse("06/07/2022 15:00 PM"), DateTime.Parse("06/07/2022 18:00 PM"), cambiosEstadoTurno3, 11));
+                turnosDeRecurso.Add(new Turno(DateTime.Parse("01/06/2022"), "Jueves", DateTime.Parse("07/07/2022 15:00 PM"), DateTime.Parse("07/07/2022 18:00 PM"), cambiosEstadoTurno3, 12));
 
-
-                this.recursoSeleccionado.Turnos = turnosDeRecurso;
-
+                if (!this.recursoSeleccionado.NumeroRT.Equals(3))
+                {
+                    this.recursoSeleccionado.Turnos = turnosDeRecurso;
+                }
                 return turnosDeRecurso;
             }
 
             public List<CentroDeInvestigacion> obtenerCentrosDeInvestigacion()
             {
                 var cambiosEstadoRT = new List<CambioEstadoRT>();
-                cambiosEstadoRT.Add(new CambioEstadoRT(DateTime.Parse("15/06/2022"), new Estado("Ingresado", "", "Recurso Tecnologico", true, false)));
+                cambiosEstadoRT.Add(new CambioEstadoRT(DateTime.Parse("15/06/2022"), new Estado("Disponible", "", "Recurso Tecnologico", true, false)));
 
-                List<CentroDeInvestigacion> centros = new List<CentroDeInvestigacion>();
+                var cambiosEstadoRTMantenimiento = new List<CambioEstadoRT>();
+                cambiosEstadoRTMantenimiento.Add(new CambioEstadoRT(DateTime.Parse("15/06/2022"), new Estado("Disponible", "", "Recurso Tecnologico", true, false)));
+                cambiosEstadoRTMantenimiento[0].FechaHoraHasta = DateTime.Parse("30/06/2022 08:00 AM");
+                cambiosEstadoRTMantenimiento.Add(new CambioEstadoRT(DateTime.Parse("15/06/2022"), new Estado("En Mantenimiento Correctivo", "", "Recurso Tecnologico", false, false)));
+
+            List<CentroDeInvestigacion> centros = new List<CentroDeInvestigacion>();
 
                 #region recursos CI 1
 
@@ -426,7 +432,7 @@ namespace DSI_PPAI.Control
                     2,
                     1,
                     1,
-                    cambiosEstadoRT.ToArray(),
+                    cambiosEstadoRTMantenimiento.ToArray(),
                     new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
                     new Modelo("AmScope M150C-I40X-1000X - E"));
 
@@ -447,8 +453,11 @@ namespace DSI_PPAI.Control
                 recursos1.Add(recurso4);
                 recursos1.Add(recurso5);
                 #endregion
+                
+                //asigno cientificos 
                 List<AsignacionCientificoDelCI> cientificos1 = new List<AsignacionCientificoDelCI>();
                 cientificos1.Add(new AsignacionCientificoDelCI(DateTime.Parse("27/02/1995"), new PersonalCientifico(888111, "Marcelo", "Lopez", 20225885, "", "", 0, null)));
+                // asigno cientificos y recursos a centro
                 var centro1 = new CentroDeInvestigacion("Universidad Nacional de Cordoba", "UNC", "", "", 1, "", "35125556932", "unc@unc.edu.ar", 0, DateTime.Parse("15/02/1996"), "", "", DateTime.Parse("15/02/1996"), 2, recursos1, cientificos1);
 
                 #region recursos CI2
@@ -461,7 +470,7 @@ namespace DSI_PPAI.Control
                     2,
                     1,
                     1,
-                    cambiosEstadoRT.ToArray(),
+                    cambiosEstadoRTMantenimiento.ToArray(),
                     new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
                     new Modelo("XS2-35"));
 
@@ -481,8 +490,11 @@ namespace DSI_PPAI.Control
 
 
                 #endregion
+                
+                // asigno cientificos
                 List<AsignacionCientificoDelCI> cientificos2 = new List<AsignacionCientificoDelCI>();
                 cientificos2.Add(new AsignacionCientificoDelCI(DateTime.Parse("12/02/1990"), new PersonalCientifico(758889, "Carlos", "Saavedra", 15112887, "", "", 0, null)));
+                // asigno cientificos y recursos a centro
                 var centro2 = new CentroDeInvestigacion("Universidad Tecnologica Nacional - Regional Cordoba", "UTN - FRC", "", "", 1, "", "3514456669", "utn@frc.utn.edu.ar", 0, DateTime.Parse("15/01/1998"), "", "", DateTime.Parse("15/01/1998"), 5, recursos2, cientificos2);
 
                 centros.Add(centro1);
@@ -494,7 +506,12 @@ namespace DSI_PPAI.Control
             public List<RecursoTecnologico> obtenerRecursosTecnologicos()
             {
                 var cambiosEstadoRT = new List<CambioEstadoRT>();
-                cambiosEstadoRT.Add(new CambioEstadoRT(DateTime.Parse("15/06/2022"), new Estado("Ingresado", "", "Recurso Tecnologico", true, false)));
+                cambiosEstadoRT.Add(new CambioEstadoRT(DateTime.Parse("15/06/2022"), new Estado("Disponible", "", "Recurso Tecnologico", true, false)));
+
+                var cambiosEstadoRTMantenimiento = new List<CambioEstadoRT>();
+                cambiosEstadoRTMantenimiento.Add(new CambioEstadoRT(DateTime.Parse("15/06/2022"), new Estado("Disponible", "", "Recurso Tecnologico", true, false)));
+                cambiosEstadoRTMantenimiento[0].FechaHoraHasta = DateTime.Parse("30/06/2022 08:00 AM");
+                cambiosEstadoRTMantenimiento.Add(new CambioEstadoRT(DateTime.Parse("15/06/2022"), new Estado("En Mantenimiento Correctivo", "", "Recurso Tecnologico", false, false)));
 
                 var recurso1 = new RecursoTecnologico(
                     1,
@@ -538,7 +555,7 @@ namespace DSI_PPAI.Control
                     2,
                     1,
                     1,
-                    cambiosEstadoRT.ToArray(),
+                    cambiosEstadoRTMantenimiento.ToArray(),
                     new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
                     new Modelo("AmScope M150C-I40X-1000X - E"));
 
@@ -562,7 +579,7 @@ namespace DSI_PPAI.Control
                     2,
                     1,
                     1,
-                    cambiosEstadoRT.ToArray(),
+                    cambiosEstadoRTMantenimiento.ToArray(),
                     new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
                     new Modelo("XS2-35"));
             

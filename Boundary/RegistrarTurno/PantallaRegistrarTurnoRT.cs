@@ -130,7 +130,7 @@ namespace DSI_PPAI.Boundary
         }
 
 
-        #region Agrupamos recursos segun centro de investigacion
+        #region Agrupamos recursos segun centro de investigacion - identificamos segun estado
                
 
         private void dgvRecursos_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
@@ -172,7 +172,7 @@ namespace DSI_PPAI.Boundary
             {
                 foreach (DataGridViewRow myRow in dgvRecursos.Rows)
                 {
-                    if (myRow.Cells[3].Value != null && myRow.Cells[3].Value.Equals("Ingresado"))
+                    if (myRow.Cells[3].Value != null && myRow.Cells[3].Value.Equals("Disponible"))
                     {
                         myRow.DefaultCellStyle.BackColor = Color.LightSkyBlue;
                     }

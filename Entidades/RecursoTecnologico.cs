@@ -120,11 +120,14 @@ namespace DSI_PPAI.Entidades {
         public List<Dictionary<string, string>> getTurnosRT(DateTime fechaActual)
         {
             List<Dictionary<string, string>> turnosRT = new List<Dictionary<string, string>>();
-            foreach (Turno turno in this.turnos)
+            if (this.turnos != null && this.turnos.Any())
             {
-                if (turno.esPosteriorFechaActual(fechaActual))
+                foreach (Turno turno in this.turnos)
                 {
-                    turnosRT.Add(turno.getDatos());
+                    if (turno.esPosteriorFechaActual(fechaActual))
+                    {
+                        turnosRT.Add(turno.getDatos());
+                    }
                 }
             }
             return turnosRT;
