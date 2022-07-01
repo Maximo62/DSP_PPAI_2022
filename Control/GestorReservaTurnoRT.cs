@@ -476,6 +476,9 @@ namespace DSI_PPAI.Control
                     new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
                     new Modelo("XS2-35-1"));
 
+                recursos2.Add(recurso6);
+                recursos2.Add(recurso7); ;
+
 
                 #endregion
                 List<AsignacionCientificoDelCI> cientificos2 = new List<AsignacionCientificoDelCI>();
