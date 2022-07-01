@@ -58,20 +58,19 @@ namespace DSI_PPAI.Control
 
         }
 
-
-
         public void tomarSeleccionTipoRT(int indice)
         {
             if (!indice.Equals(0))
             {
                 this.tipoRecursoSeleccionado = tipoRecursoTecnologicos[indice - 1];
-                this.buscarRTActivos(tipoRecursoSeleccionado);
+                this.buscarRTActivosDeTipo(tipoRecursoSeleccionado);
             } else
             {
                 this.buscarTodosRTActivos();
             }
 
         }
+
         /* Este metodo buscará todos los RT activos */
         public void buscarTodosRTActivos()
         {
@@ -92,7 +91,7 @@ namespace DSI_PPAI.Control
         /* Este metodo buscará todos los recursos tecnologicos 
           activos segun el tipo de recurso seleccionado, 
           revisando si el turno es reservable */
-        public void buscarRTActivos(TipoRecursoTecnologico tipoRecurso)
+        public void buscarRTActivosDeTipo(TipoRecursoTecnologico tipoRecurso)
         {
             this.recursosActivos = new List<RecursoTecnologico>();
             var recursos = obtenerRecursosTecnologicos();

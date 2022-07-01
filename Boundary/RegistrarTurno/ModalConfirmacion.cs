@@ -36,7 +36,6 @@ namespace DSI_PPAI.Boundary.RegistrarTurno
             cboTiposNotificacion.SelectedIndex = 0;
             cboTiposNotificacion.Refresh();
 
-
             this.Show();
         }
 
