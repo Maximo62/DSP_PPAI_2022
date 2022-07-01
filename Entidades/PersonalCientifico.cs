@@ -39,7 +39,7 @@ namespace DSI_PPAI.Entidades
 
 		public bool esTuUsuario(Usuario usuarioAComprobar)
         {
-			return this.usuario.UsuarioNombre.Equals(usuarioAComprobar.UsuarioNombre);
+			return usuarioAComprobar.sosUsuario(this.Usuario);
         }
 	}
  }

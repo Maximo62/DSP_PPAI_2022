@@ -34,5 +34,10 @@ namespace DSI_PPAI.Entidades
             }
             return null;
         }
+
+        public bool sosUsuario(Usuario usuario)
+        {
+            return usuario.UsuarioNombre.Equals(this.UsuarioNombre);
+        }
     }
 }

@@ -24,7 +24,7 @@ namespace DSI_PPAI.Entidades
         {
             foreach (Modelo modelo in Modelos)
             {
-                if (modelo.Nombre.Equals(modeloAComprobar.Nombre))
+                if (modeloAComprobar.sosModelo(modelo))
                 {
                     return true;
                 }

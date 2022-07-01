@@ -29,5 +29,10 @@ namespace DSI_PPAI.Entidades
             }
             return "";
         }
+
+        public bool sosModelo(Modelo modelo)
+        {
+            return modelo.Nombre.Equals(this.Nombre);
+        }
     }
 }

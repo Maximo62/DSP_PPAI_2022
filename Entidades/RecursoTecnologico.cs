@@ -95,6 +95,11 @@ namespace DSI_PPAI.Entidades {
             return null;
         }
 
+        public bool sosRecurso(RecursoTecnologico recurso)
+        {
+            return recurso.NumeroRT.Equals(this.NumeroRT);
+        }
+
         public string getEstadoActual()
         {
             foreach (CambioEstadoRT cambioEstado in this.CambiosEstadoRT)

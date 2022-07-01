@@ -91,7 +91,7 @@
         {
             foreach (RecursoTecnologico rec in RecursoTecnologicos)
             {
-                if (rec.NumeroRT.Equals(recurso.NumeroRT))
+                if (recurso.sosRecurso(rec))
                 {
                     return true;
                 }
