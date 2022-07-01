@@ -167,6 +167,26 @@ namespace DSI_PPAI.Boundary
                     e.FormattingApplied = true;
                 }
             }
+
+            if (dgvRecursos.Rows != null && dgvRecursos.Rows.Count > 0)
+            {
+                foreach (DataGridViewRow myRow in dgvRecursos.Rows)
+                {
+                    if (myRow.Cells[3].Value != null && myRow.Cells[3].Value.Equals("Ingresado"))
+                    {
+                        myRow.DefaultCellStyle.BackColor = Color.LightSkyBlue;
+                    }
+                    else if (myRow.Cells[3].Value != null && myRow.Cells[4].Value.Equals("En Mantenimiento"))
+                    {
+                        myRow.DefaultCellStyle.BackColor = Color.LightGreen;
+                    }
+                    else
+                    {
+                        myRow.DefaultCellStyle.BackColor = Color.LightGray;
+                    }
+                }
+            }
+
         }
 
         private bool IsRepeatedCellValue(int rowIndex, int colIndex)
