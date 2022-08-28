@@ -284,14 +284,10 @@ namespace DSI_PPAI.Control
             pantallaRegistrarTurnoRT.mostrarMensaje("La reserva se realizó con éxito");
             pantallaRegistrarTurnoRT.ocultarPantalla();
         }
-
-        #region metodos de soporte
         private List<Dictionary<string, string>> ordenarTurnosPorFechaHoraInicio(List<Dictionary<string, string>> data)
         {
             return data.OrderBy(dict => dict["Fecha y Hora Inicio"]).ToList<Dictionary<string, string>>();
         }
-
-        #endregion
 
         #region "consultas" a la base ---> generamos los objetos simulando consultas
 
@@ -382,11 +378,6 @@ namespace DSI_PPAI.Control
                 var cambiosEstadoRT = new List<CambioEstadoRT>();
                 cambiosEstadoRT.Add(new CambioEstadoRT(DateTime.Parse("15/06/2022"), new Estado("Disponible", "", "Recurso Tecnologico", true, false)));
 
-                var cambiosEstadoRTMantenimiento = new List<CambioEstadoRT>();
-                cambiosEstadoRTMantenimiento.Add(new CambioEstadoRT(DateTime.Parse("15/06/2022"), new Estado("Disponible", "", "Recurso Tecnologico", true, false)));
-                cambiosEstadoRTMantenimiento[0].FechaHoraHasta = DateTime.Parse("30/06/2022 08:00 AM");
-                cambiosEstadoRTMantenimiento.Add(new CambioEstadoRT(DateTime.Parse("15/06/2022"), new Estado("En Mantenimiento Correctivo", "", "Recurso Tecnologico", false, false)));
-
             List<CentroDeInvestigacion> centros = new List<CentroDeInvestigacion>();
 
                 #region recursos CI 1
@@ -432,7 +423,7 @@ namespace DSI_PPAI.Control
                     2,
                     1,
                     1,
-                    cambiosEstadoRTMantenimiento.ToArray(),
+                    cambiosEstadoRT.ToArray(),
                     new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
                     new Modelo("AmScope M150C-I40X-1000X - E"));
 
@@ -470,7 +461,7 @@ namespace DSI_PPAI.Control
                     2,
                     1,
                     1,
-                    cambiosEstadoRTMantenimiento.ToArray(),
+                    cambiosEstadoRT.ToArray(),
                     new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
                     new Modelo("XS2-35"));
 
@@ -507,11 +498,6 @@ namespace DSI_PPAI.Control
             {
                 var cambiosEstadoRT = new List<CambioEstadoRT>();
                 cambiosEstadoRT.Add(new CambioEstadoRT(DateTime.Parse("15/06/2022"), new Estado("Disponible", "", "Recurso Tecnologico", true, false)));
-
-                var cambiosEstadoRTMantenimiento = new List<CambioEstadoRT>();
-                cambiosEstadoRTMantenimiento.Add(new CambioEstadoRT(DateTime.Parse("15/06/2022"), new Estado("Disponible", "", "Recurso Tecnologico", true, false)));
-                cambiosEstadoRTMantenimiento[0].FechaHoraHasta = DateTime.Parse("30/06/2022 08:00 AM");
-                cambiosEstadoRTMantenimiento.Add(new CambioEstadoRT(DateTime.Parse("15/06/2022"), new Estado("En Mantenimiento Correctivo", "", "Recurso Tecnologico", false, false)));
 
                 var recurso1 = new RecursoTecnologico(
                     1,
@@ -555,7 +541,7 @@ namespace DSI_PPAI.Control
                     2,
                     1,
                     1,
-                    cambiosEstadoRTMantenimiento.ToArray(),
+                    cambiosEstadoRT.ToArray(),
                     new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
                     new Modelo("AmScope M150C-I40X-1000X - E"));
 
@@ -579,7 +565,7 @@ namespace DSI_PPAI.Control
                     2,
                     1,
                     1,
-                    cambiosEstadoRTMantenimiento.ToArray(),
+                    cambiosEstadoRT.ToArray(),
                     new TipoRecursoTecnologico("Microscopio de contraste de fases", ""),
                     new Modelo("XS2-35"));
             

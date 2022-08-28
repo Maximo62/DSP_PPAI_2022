@@ -155,19 +155,6 @@ namespace DSI_PPAI.Boundary
 
         private void dgvRecursos_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (e.RowIndex == 0)
-            {
-                return;
-            }
-            if (e.ColumnIndex == 0)
-            {
-                if (IsRepeatedCellValue(e.RowIndex, e.ColumnIndex))
-                {
-                    e.Value = string.Empty;
-                    e.FormattingApplied = true;
-                }
-            }
-
             if (dgvRecursos.Rows != null && dgvRecursos.Rows.Count > 0)
             {
                 foreach (DataGridViewRow myRow in dgvRecursos.Rows)
@@ -187,6 +174,18 @@ namespace DSI_PPAI.Boundary
                 }
             }
 
+            if (e.RowIndex == 0)
+            {
+                return;
+            }
+            if (e.ColumnIndex == 0)
+            {
+                if (IsRepeatedCellValue(e.RowIndex, e.ColumnIndex))
+                {
+                    e.Value = string.Empty;
+                    e.FormattingApplied = true;
+                }
+            }
         }
 
         private bool IsRepeatedCellValue(int rowIndex, int colIndex)
